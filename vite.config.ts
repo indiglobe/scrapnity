@@ -16,6 +16,10 @@ const config = defineConfig({
     viteReact(),
     babel({ presets: [reactCompilerPreset()] }),
   ],
+
+  server: {
+    host: "0.0.0.0",
+  },
 });
 
 export default config;

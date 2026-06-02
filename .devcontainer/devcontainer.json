@@ -7,7 +7,9 @@
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [
+		3000
+	],
 	// mount the node_mosules in a volume to skip installing multiple times for differet system
 	"mounts": [
 		"source=node_modules,target=/workspaces/${localWorkspaceFolderBasename}/node_modules,type=volume"

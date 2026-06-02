@@ -1,15 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import type { LinkProps } from "@tanstack/react-router";
 import { cn } from "@/lib/utils/cn";
-import { ArrowRight, Mail, MapPin, Phone, Recycle } from "lucide-react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
 import type { ComponentProps } from "react";
 import Logo from "@/components/logo";
-import {
-  platformAddress,
-  platformEmail,
-  platformLocation,
-  platformPhoneNo,
-} from "@/data/const";
+import { platformEmail, platformPhoneNo } from "@/data/const";
 
 const navigation = [
   {
@@ -184,17 +179,6 @@ export function Footer({ className, ...props }: ComponentProps<"footer">) {
 
                 <span className={cn(`text-foreground/70 text-sm`)}>
                   {platformEmail}
-                </span>
-              </a>
-
-              <a
-                href={platformLocation}
-                className={cn(`flex items-start gap-3`)}
-              >
-                <MapPin className={cn(`text-primary-500 mt-0.5 h-4 w-4`)} />
-
-                <span className={cn(`text-foreground/70 text-sm`)}>
-                  {platformAddress}
                 </span>
               </a>
             </div>

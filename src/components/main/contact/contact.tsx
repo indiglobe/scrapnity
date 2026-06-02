@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { Mail, MapPin, Phone, Recycle } from "lucide-react";
+import { Mail, Phone, Recycle } from "lucide-react";
 
 import { cn } from "@/lib/utils/cn";
 import { Button } from "@/ui/button";
@@ -191,26 +191,6 @@ export function ContactFormSection() {
                   </p>
 
                   <p className={cn(`mt-2 text-sm`)}>hello@scrapnity.com</p>
-                </div>
-              </div>
-
-              <div className={cn(`flex items-start gap-4 p-6`)}>
-                <MapPin
-                  className={cn(`text-primary-500 mt-0.5 h-5 w-5 shrink-0`)}
-                />
-
-                <div>
-                  <p
-                    className={cn(
-                      `text-foreground/40 text-[11px] font-black tracking-[0.18em] uppercase`,
-                    )}
-                  >
-                    Location
-                  </p>
-
-                  <p className={cn(`mt-2 text-sm`)}>
-                    Mumbai, Maharashtra, India
-                  </p>
                 </div>
               </div>
             </div>
