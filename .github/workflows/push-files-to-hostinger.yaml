@@ -23,11 +23,13 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install pnpm
-        run: npm install pnpm -g
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --no-interactive --approve-builds
+        run: pnpm install --frozen-lockfile
 
       - name: Build React app
         run: pnpm run build
@@ -39,5 +41,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_PATH }}
-          local-dir: dist/client
+          local-dir: dist/client/ # local-dir should be a folder (must end with /)
           log-level: standard
