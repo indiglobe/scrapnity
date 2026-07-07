@@ -478,6 +478,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
               Serviceable Pincode
             </label>
 
+            {/* Selected pincodes */}
             <div className={cn(`flex flex-wrap gap-2`)}>
               {field.state.value.map((pin, index) => (
                 <div
@@ -492,7 +493,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                     type="button"
                     onClick={() => field.removeValue(index)}
                     className={cn(
-                      `border-primary-300/50 hover:bg-primary-600 border-l px-3 py-2 transition`,
+                      `border-primary-300/50 hover:bg-primary-600 border-l px-3 py-2 transition-colors`,
                     )}
                     aria-label={`Remove ${pin}`}
                   >
@@ -502,8 +503,9 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
               ))}
             </div>
 
+            {/* Input + Add button */}
             {field.state.value.length < 3 && (
-              <>
+              <div className={cn(`flex flex-col gap-3 sm:flex-row`)}>
                 <input
                   id="serviceablePincode"
                   type="text"
@@ -515,10 +517,12 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                     const value = e.target.value.replace(/\D/g, "");
                     setTempPinCode(value);
                   }}
-                  className={inputClass}
+                  className={cn(inputClass, `flex-1`)}
                 />
+
                 <button
                   type="button"
+                  disabled={tempPinCode.length !== 6}
                   onClick={() => {
                     if (
                       tempPinCode.length === 6 &&
@@ -528,11 +532,19 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                       setTempPinCode("");
                     }
                   }}
+                  className={cn(
+                    `border-primary-600 bg-primary-500 hover:bg-primary-600 active:bg-primary-700 border px-6 py-3 text-sm font-semibold tracking-wide text-white uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-50`,
+                  )}
                 >
                   Add
                 </button>
-              </>
+              </div>
             )}
+
+            {/* Helper text */}
+            <p className={cn(`text-accent-500 text-xs`)}>
+              You can add up to 3 serviceable pincodes.
+            </p>
 
             {field.state.meta.errors.length > 0 && (
               <p className={errorClass}>{field.state.meta.errors[0]}</p>
