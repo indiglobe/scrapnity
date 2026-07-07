@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import type { LinkProps } from "@tanstack/react-router";
 import { cn } from "@/lib/utils/cn";
-import { ArrowRight, Menu, Phone, X } from "lucide-react";
-import { platformPhoneNo } from "@/data/const";
+import { ArrowRight, Menu, X } from "lucide-react";
 import Logo from "@/components/logo";
 
 const navigation = [
@@ -111,15 +110,14 @@ export default function Navbar() {
 
             {/* Desktop CTA */}
             <div className={cn(`hidden items-center gap-3 lg:flex`)}>
-              <a
-                href={`tel:+91${platformPhoneNo}`}
+              <Link
+                to="/become-a vendor"
                 className={cn(
                   `group bg-primary-500 text-primary-50 flex items-center gap-2 px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5`,
                 )}
               >
-                <Phone className={cn(`h-4 w-4`)} />
-                Call Now
-              </a>
+                Become a vendor
+              </Link>
             </div>
 
             {/* Mobile Toggle */}
@@ -203,15 +201,14 @@ export default function Navbar() {
             })}
 
             <div className={cn(`mt-auto space-y-3 pt-8`)}>
-              <a
-                href={`tel:+91${platformPhoneNo}`}
+              <Link
+                to="/become-a vendor"
                 className={cn(
                   `border-primary-500/10 bg-primary-500 text-primary-50 flex items-center justify-center gap-2 border py-3 text-xs font-bold tracking-[0.18em] uppercase`,
                 )}
               >
-                <Phone className={cn(`h-4 w-4`)} />
-                Call Now
-              </a>
+                Become a vendor
+              </Link>
             </div>
           </div>
         </div>

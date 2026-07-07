@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
+import { Route as BecomeAvendorIndexRouteImport } from './routes/become-a vendor/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const ContactIndexRoute = ContactIndexRouteImport.update({
   path: '/contact/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BecomeAvendorIndexRoute = BecomeAvendorIndexRouteImport.update({
+  id: '/become-a vendor/',
+  path: '/become-a vendor/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
@@ -38,12 +44,14 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about/': typeof AboutIndexRoute
+  '/become-a vendor/': typeof BecomeAvendorIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
+  '/become-a vendor': typeof BecomeAvendorIndexRoute
   '/contact': typeof ContactIndexRoute
   '/services': typeof ServicesIndexRoute
 }
@@ -51,20 +59,28 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about/': typeof AboutIndexRoute
+  '/become-a vendor/': typeof BecomeAvendorIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about/' | '/contact/' | '/services/'
+  fullPaths: '/' | '/about/' | '/become-a vendor/' | '/contact/' | '/services/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/services'
-  id: '__root__' | '/' | '/about/' | '/contact/' | '/services/'
+  to: '/' | '/about' | '/become-a vendor' | '/contact' | '/services'
+  id:
+    | '__root__'
+    | '/'
+    | '/about/'
+    | '/become-a vendor/'
+    | '/contact/'
+    | '/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutIndexRoute: typeof AboutIndexRoute
+  BecomeAvendorIndexRoute: typeof BecomeAvendorIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
 }
@@ -92,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/become-a vendor/': {
+      id: '/become-a vendor/'
+      path: '/become-a vendor'
+      fullPath: '/become-a vendor/'
+      preLoaderRoute: typeof BecomeAvendorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about/': {
       id: '/about/'
       path: '/about'
@@ -105,6 +128,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutIndexRoute: AboutIndexRoute,
+  BecomeAvendorIndexRoute: BecomeAvendorIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
   ServicesIndexRoute: ServicesIndexRoute,
 }
