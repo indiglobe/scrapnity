@@ -1,4 +1,4 @@
-export const platformPhoneNo = "8336071074";
+export const platformPhoneNo = "9580693651";
 
 export const platformEmail = "scrapnity@gmail.com";
 

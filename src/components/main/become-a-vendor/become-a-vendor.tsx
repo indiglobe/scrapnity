@@ -140,6 +140,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
               className={inputClass}
+              placeholder="Please provide your name"
             />
 
             {field.state.meta.errors.length > 0 && (
@@ -174,6 +175,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                 field.handleChange(e.target.value.replace(/\D/g, ""))
               }
               className={inputClass}
+              placeholder="Please provide your contact details"
             />
 
             {field.state.meta.errors.length > 0 && (
@@ -208,6 +210,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                 field.handleChange(e.target.value.replace(/\D/g, ""))
               }
               className={inputClass}
+              placeholder="Please provide your Addhar no. (must be 12 digit)"
             />
 
             {field.state.meta.errors.length > 0 && (
@@ -314,6 +317,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                 field.handleChange(e.target.value.replace(/\D/g, ""))
               }
               className={inputClass}
+              placeholder="Provide maximum price you would pay."
             />
 
             {field.state.meta.errors.length > 0 && (
@@ -322,7 +326,6 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           </div>
         )}
       </form.Field>
-      {/* Address */}
       {/* Address Section */}
       <div className={cn(`grid grid-cols-1 gap-6 sm:grid-cols-2`)}>
         {/* Street Address */}
@@ -337,11 +340,12 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
             <div className={cn(`relative space-y-2 sm:col-span-2`)}>
               <label className={labelClass}>Street Address</label>
 
-              <textarea
-                rows={3}
+              <input
+                type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                className={cn(` ${inputClass} min-h-28 resize-none`)}
+                className={cn(`${inputClass}`)}
+                placeholder="Provide address"
               />
 
               {field.state.meta.errors.length > 0 && (
@@ -367,6 +371,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={inputClass}
+                placeholder="Your city"
               />
 
               {field.state.meta.errors.length > 0 && (
@@ -392,6 +397,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={inputClass}
+                placeholder="Your distric"
               />
 
               {field.state.meta.errors.length > 0 && (
@@ -417,6 +423,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={inputClass}
+                placeholder="Your state"
               />
 
               {field.state.meta.errors.length > 0 && (
@@ -449,6 +456,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                   field.handleChange(e.target.value.replace(/\D/g, ""))
                 }
                 className={inputClass}
+                placeholder="Your pincode"
               />
 
               {field.state.meta.errors.length > 0 && (
@@ -512,7 +520,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                   inputMode="numeric"
                   maxLength={6}
                   value={tempPinCode}
-                  placeholder="Enter serviceable pincode"
+                  placeholder="Enter serviceable pincode, (upto 3 pincode)"
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, "");
                     setTempPinCode(value);
