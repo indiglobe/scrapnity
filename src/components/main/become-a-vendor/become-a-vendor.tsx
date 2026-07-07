@@ -397,7 +397,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={inputClass}
-                placeholder="Your distric"
+                placeholder="Your district"
               />
 
               {field.state.meta.errors.length > 0 && (
