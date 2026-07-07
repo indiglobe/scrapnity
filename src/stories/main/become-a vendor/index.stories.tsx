@@ -1,4 +1,4 @@
-import { BecomeVendor } from "@/components/main/become-a vendor/become-a vendor";
+import { BecomeVendor } from "@/components/main/become-a-vendor/become-a vendor";
 import type { TypedMetaOptions } from "@/integrations/storybook/sb.types";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
