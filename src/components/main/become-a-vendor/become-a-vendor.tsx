@@ -1,7 +1,7 @@
 import { platformPhoneNo } from "@/data/const";
 import { cn } from "@/lib/utils/cn";
 import { useForm } from "@tanstack/react-form";
-import { X } from "lucide-react";
+import { Info, X } from "lucide-react";
 import { useState } from "react";
 
 export function BecomeVendor() {
@@ -30,7 +30,7 @@ const SCRAP_OPTIONS = [
   "Window AC",
   "Cooler",
   "Single Door Fridge",
-  "Ddouble Door Fridge",
+  "Double Door Fridge",
   "Deep Fridge",
   "Microwave",
   "Toaster",
@@ -50,7 +50,61 @@ const SCRAP_OPTIONS = [
   "Copper",
   "Brass",
   "Aluminium",
-];
+] as const;
+
+const PRICE = [
+  {
+    item: "Washing Machine Top Load",
+    price: { amount: 700, quantityUnit: "Piece" },
+  },
+  {
+    item: "Washing Machine Front Load",
+    price: { amount: 1500, quantityUnit: "Piece" },
+  },
+  {
+    item: "Single Door Fridge",
+    price: { amount: 1200, quantityUnit: "Piece" },
+  },
+  {
+    item: "Double Door Fridge",
+    price: { amount: 1800, quantityUnit: "Piece" },
+  },
+  {
+    item: "Deep Fridge",
+    price: { amount: 1000, quantityUnit: "Piece" },
+  },
+  {
+    item: "Window AC",
+    price: { amount: 6500, quantityUnit: "Piece" },
+  },
+  {
+    item: "Split AC",
+    price: { amount: 6500, quantityUnit: "Piece" },
+  },
+  {
+    item: "Box TV",
+    price: { amount: 500, quantityUnit: "Piece" },
+  },
+  {
+    item: "LED/LCD TV",
+    price: { amount: 700, quantityUnit: "Piece" },
+  },
+  {
+    item: "CPU",
+    price: { amount: 1200, quantityUnit: "Piece" },
+  },
+  {
+    item: "Monitor",
+    price: { amount: 500, quantityUnit: "Piece" },
+  },
+  {
+    item: "UPS",
+    price: { amount: 800, quantityUnit: "Piece" },
+  },
+] satisfies {
+  item: Exclude<(typeof SCRAP_OPTIONS)[number], "--select--">;
+  price: { amount: number; quantityUnit: "Kg" | "Gram" | "Piece" };
+}[];
 
 export function VendorForm() {
   const [tempPinCode, setTempPinCode] = useState("");
@@ -68,15 +122,15 @@ export function VendorForm() {
       aadharNo: "",
       serviceablePincode: [] as string[],
       scrapItems: [] as string[],
-      maximumPrice: "",
     },
+
+    formId: "vendor form",
 
     onSubmit: async ({ value }) => {
       const {
         aadharNo,
         address,
         contactNo,
-        maximumPrice,
         name,
         serviceablePincode,
         scrapItems,
@@ -86,7 +140,6 @@ export function VendorForm() {
 Name : ${name}
 Contact no : ${contactNo}
 Scrap item : ${scrapItems.join(", ")}
-Maximum price: ${maximumPrice}
 Aadhar no : ${aadharNo}
 
 Address :
@@ -314,38 +367,83 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           </div>
         )}
       </form.Field>
-      {/* Maximum Price */}
-      <form.Field
-        name="maximumPrice"
-        validators={{
-          onChange: ({ value }) =>
-            /^\d+$/.test(value) ? undefined : "Enter valid maximum price",
+      {/* Vendor Price */}
+      <form.Field name="scrapItems">
+        {(field) => {
+          const selectedPrices = field.state.value.map((item) => ({
+            item,
+            data: PRICE.find((p) => p.item === item),
+          }));
+
+          return (
+            <div className={cn(`space-y-4`)}>
+              <div>
+                <h3 className={cn(labelClass)}>Vendor Price</h3>
+                <p className={cn(`text-accent-500 mt-1 text-xs`)}>
+                  The following are the maximum purchase prices allowed by
+                  Scrapnity.
+                </p>
+              </div>
+
+              {selectedPrices.length === 0 ? (
+                <div
+                  className={cn(
+                    `border-accent-300 bg-accent-50 text-accent-600 rounded-md border border-dashed p-4 text-sm`,
+                  )}
+                >
+                  Select one or more scrap items to view their allowed prices.
+                </div>
+              ) : (
+                <div className={cn(`grid gap-3 sm:grid-cols-2`)}>
+                  {selectedPrices.map(({ item, data }) => (
+                    <div
+                      key={item}
+                      className={cn(
+                        `border-accent-300 bg-background flex items-center justify-between rounded-lg border p-4 shadow-sm`,
+                      )}
+                    >
+                      <div>
+                        <h4 className={cn(`text-accent-900 font-semibold`)}>
+                          {item}
+                        </h4>
+
+                        {!data && (
+                          <p className={cn(`text-accent-500 mt-1 text-xs`)}>
+                            As per current market / Lot basis
+                          </p>
+                        )}
+                      </div>
+
+                      {data ? (
+                        <div className={cn(`text-right`)}>
+                          <div
+                            className={cn(`text-primary-600 text-xl font-bold`)}
+                          >
+                            ₹{data.price.amount}
+                          </div>
+
+                          <div className={cn(`text-accent-500 text-xs`)}>
+                            / {data.price.quantityUnit}
+                          </div>
+                        </div>
+                      ) : (
+                        <span
+                          className={cn(
+                            `bg-secondary-100 text-secondary-700 rounded-full px-3 py-1 text-xs font-medium`,
+                          )}
+                        >
+                          Market Rate
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
         }}
-      >
-        {(field) => (
-          <div className={cn(`relative space-y-2`)}>
-            <label htmlFor="maximumPrice" className={labelClass}>
-              Maximum Price
-            </label>
-
-            <input
-              id="maximumPrice"
-              type="text"
-              inputMode="numeric"
-              value={field.state.value}
-              onChange={(e) =>
-                field.handleChange(e.target.value.replace(/\D/g, ""))
-              }
-              className={inputClass}
-              placeholder="Provide maximum price you would pay."
-            />
-
-            {field.state.meta.errors.length > 0 && (
-              <p className={errorClass}>{field.state.meta.errors[0]}</p>
-            )}
-          </div>
-        )}
       </form.Field>
+
       {/* Address Section */}
       <div className={cn(`grid grid-cols-1 gap-6 sm:grid-cols-2`)}>
         {/* Street Address */}
@@ -580,6 +678,12 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           </div>
         )}
       </form.Field>
+
+      <div className={cn(`text-xs text-red-500`)}>
+        <Info className={cn(`inline-block size-3`)} /> Vendors need to provide
+        10-20% commission to Scrapnity
+      </div>
+
       <form.Subscribe
         selector={(state) => ({
           isValid: state.isValid,
