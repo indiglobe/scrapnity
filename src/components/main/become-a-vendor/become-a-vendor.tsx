@@ -26,33 +26,63 @@ export function BecomeVendor() {
 
 const SCRAP_OPTIONS = [
   "--select--",
-  "Split AC",
-  "Window AC",
-  "Cooler",
+  "Window AC 1 Ton",
+  "Window AC 1.5 Ton",
+  "Window AC 2 Ton",
+  "Split AC 1 Ton",
+  "Split AC 1.5 Ton",
+  "Split AC 2 Ton",
   "Single Door Fridge",
   "Double Door Fridge",
-  "Deep Fridge",
-  "Microwave",
-  "Toaster",
-  "Gyser",
-  "Water Purifier",
-  "Music System",
-  "CPU",
-  "Monitor",
-  "UPS",
-  "Battery",
   "Washing Machine Top Load",
   "Washing Machine Front Load",
+  "Cooler Plastic Body",
+  "Cooler Iron Body",
+  "Geyser Below 7 Ltr",
+  "Geyser 7 Ltr & Above",
   "Chimney",
+  "Microwave",
+  "OTG Toaster",
   "Box TV",
   "LED/LCD TV",
-  "Iron",
-  "Copper",
-  "Brass",
-  "Aluminium",
+  "Mobile Keypad",
+  "Mobile Android",
+  "Mobile High End",
 ] as const;
 
 const PRICE = [
+  {
+    item: "Window AC 1 Ton",
+    price: { amount: 5000, quantityUnit: "Piece" },
+  },
+  {
+    item: "Split AC 1 Ton",
+    price: { amount: 5000, quantityUnit: "Piece" },
+  },
+  {
+    item: "Window AC 1.5 Ton",
+    price: { amount: 6200, quantityUnit: "Piece" },
+  },
+  {
+    item: "Split AC 1.5 Ton",
+    price: { amount: 6200, quantityUnit: "Piece" },
+  },
+  {
+    item: "Window AC 2 Ton",
+    price: { amount: 8000, quantityUnit: "Piece" },
+  },
+  {
+    item: "Split AC 2 Ton",
+    price: { amount: 8000, quantityUnit: "Piece" },
+  },
+  {
+    item: "Single Door Fridge",
+    price: { amount: 1100, quantityUnit: "Piece" },
+  },
+  {
+    item: "Double Door Fridge",
+    price: { amount: 1500, quantityUnit: "Piece" },
+  },
   {
     item: "Washing Machine Top Load",
     price: { amount: 700, quantityUnit: "Piece" },
@@ -62,49 +92,54 @@ const PRICE = [
     price: { amount: 1500, quantityUnit: "Piece" },
   },
   {
-    item: "Single Door Fridge",
-    price: { amount: 1200, quantityUnit: "Piece" },
+    item: "Cooler Plastic Body",
+    price: { amount: 500, quantityUnit: "Piece" },
   },
   {
-    item: "Double Door Fridge",
-    price: { amount: 1800, quantityUnit: "Piece" },
-  },
-  {
-    item: "Deep Fridge",
+    item: "Cooler Iron Body",
     price: { amount: 1000, quantityUnit: "Piece" },
   },
   {
-    item: "Window AC",
-    price: { amount: 6500, quantityUnit: "Piece" },
+    item: "Geyser Below 7 Ltr",
+    price: { amount: 600, quantityUnit: "Piece" },
   },
   {
-    item: "Split AC",
-    price: { amount: 6500, quantityUnit: "Piece" },
+    item: "Geyser 7 Ltr & Above",
+    price: { amount: 1500, quantityUnit: "Piece" },
+  },
+  {
+    item: "Chimney",
+    price: { amount: 600, quantityUnit: "Piece" },
+  },
+  {
+    item: "Microwave",
+    price: { amount: 800, quantityUnit: "Piece" },
+  },
+  {
+    item: "OTG Toaster",
+    price: { amount: 500, quantityUnit: "Piece" },
   },
   {
     item: "Box TV",
-    price: { amount: 500, quantityUnit: "Piece" },
+    price: { amount: 300, quantityUnit: "Piece" },
   },
   {
     item: "LED/LCD TV",
-    price: { amount: 700, quantityUnit: "Piece" },
+    price: { amount: 400, quantityUnit: "Piece" },
   },
   {
-    item: "CPU",
-    price: { amount: 1200, quantityUnit: "Piece" },
+    item: "Mobile Keypad",
+    price: { amount: 250, quantityUnit: "Piece" },
   },
   {
-    item: "Monitor",
-    price: { amount: 500, quantityUnit: "Piece" },
-  },
-  {
-    item: "UPS",
+    item: "Mobile Android",
     price: { amount: 800, quantityUnit: "Piece" },
   },
-] satisfies {
-  item: Exclude<(typeof SCRAP_OPTIONS)[number], "--select--">;
-  price: { amount: number; quantityUnit: "Kg" | "Gram" | "Piece" };
-}[];
+  {
+    item: "Mobile High End",
+    price: { amount: 1500, quantityUnit: "Piece" },
+  },
+] as const;
 
 export function VendorForm() {
   const [tempPinCode, setTempPinCode] = useState("");
