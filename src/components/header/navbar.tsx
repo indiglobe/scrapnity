@@ -111,9 +111,18 @@ export default function Navbar() {
             {/* Desktop CTA */}
             <div className={cn(`hidden items-center gap-3 lg:flex`)}>
               <Link
-                to="/become-a-vendor"
+                to="/become-a-customer"
                 className={cn(
                   `group bg-primary-500 text-primary-50 flex items-center gap-2 px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5`,
+                )}
+              >
+                Sell and Earn
+              </Link>
+
+              <Link
+                to="/become-a-vendor"
+                className={cn(
+                  `group border-primary-500 text-primary-500 flex items-center gap-2 border px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5`,
                 )}
               >
                 Become a vendor
@@ -188,9 +197,11 @@ export default function Navbar() {
                   to={item.to}
                   onClick={() => setOpen(false)}
                   className={cn(
-                    `border-primary-500/10 flex items-center justify-between border-b py-5 text-sm font-bold tracking-[0.18em] uppercase ${
-                      active ? "text-primary-500" : "text-foreground/70"
-                    } `,
+                    `border-primary-500/10 flex items-center justify-between border-b py-5 text-sm font-bold tracking-[0.18em] uppercase`,
+                    {
+                      "text-primary-500": active,
+                      "text-foreground/70": !active,
+                    },
                   )}
                 >
                   {item.label}
@@ -202,9 +213,18 @@ export default function Navbar() {
 
             <div className={cn(`mt-auto space-y-3 pt-8`)}>
               <Link
-                to="/become-a-vendor"
+                to="/become-a-customer"
                 className={cn(
                   `border-primary-500/10 bg-primary-500 text-primary-50 flex items-center justify-center gap-2 border py-3 text-xs font-bold tracking-[0.18em] uppercase`,
+                )}
+              >
+                Sell and Earn
+              </Link>
+
+              <Link
+                to="/become-a-vendor"
+                className={cn(
+                  `border-primary-500 text-primary-500 flex items-center justify-center gap-2 border py-3 text-xs font-bold tracking-[0.18em] uppercase`,
                 )}
               >
                 Become a vendor

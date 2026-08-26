@@ -10,29 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ServicesIndexRouteImport } from './routes/services/index'
-import { Route as ContactIndexRouteImport } from './routes/contact/index'
-import { Route as BecomeAVendorIndexRouteImport } from './routes/become-a-vendor/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
+import { Route as BecomeACustomerIndexRouteImport } from './routes/become-a-customer/index'
+import { Route as BecomeAVendorIndexRouteImport } from './routes/become-a-vendor/index'
+import { Route as ContactIndexRouteImport } from './routes/contact/index'
+import { Route as ServicesIndexRouteImport } from './routes/services/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesIndexRoute = ServicesIndexRouteImport.update({
-  id: '/services/',
-  path: '/services/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactIndexRoute = ContactIndexRouteImport.update({
-  id: '/contact/',
-  path: '/contact/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BecomeAVendorIndexRoute = BecomeAVendorIndexRouteImport.update({
-  id: '/become-a-vendor/',
-  path: '/become-a-vendor/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
@@ -40,10 +26,31 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   path: '/about/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BecomeACustomerIndexRoute = BecomeACustomerIndexRouteImport.update({
+  id: '/become-a-customer/',
+  path: '/become-a-customer/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BecomeAVendorIndexRoute = BecomeAVendorIndexRouteImport.update({
+  id: '/become-a-vendor/',
+  path: '/become-a-vendor/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactIndexRoute = ContactIndexRouteImport.update({
+  id: '/contact/',
+  path: '/contact/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about/': typeof AboutIndexRoute
+  '/become-a-customer/': typeof BecomeACustomerIndexRoute
   '/become-a-vendor/': typeof BecomeAVendorIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutIndexRoute
+  '/become-a-customer': typeof BecomeACustomerIndexRoute
   '/become-a-vendor': typeof BecomeAVendorIndexRoute
   '/contact': typeof ContactIndexRoute
   '/services': typeof ServicesIndexRoute
@@ -59,19 +67,33 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about/': typeof AboutIndexRoute
+  '/become-a-customer/': typeof BecomeACustomerIndexRoute
   '/become-a-vendor/': typeof BecomeAVendorIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about/' | '/become-a-vendor/' | '/contact/' | '/services/'
+  fullPaths:
+    | '/'
+    | '/about/'
+    | '/become-a-customer/'
+    | '/become-a-vendor/'
+    | '/contact/'
+    | '/services/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/become-a-vendor' | '/contact' | '/services'
+  to:
+    | '/'
+    | '/about'
+    | '/become-a-customer'
+    | '/become-a-vendor'
+    | '/contact'
+    | '/services'
   id:
     | '__root__'
     | '/'
     | '/about/'
+    | '/become-a-customer/'
     | '/become-a-vendor/'
     | '/contact/'
     | '/services/'
@@ -80,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutIndexRoute: typeof AboutIndexRoute
+  BecomeACustomerIndexRoute: typeof BecomeACustomerIndexRoute
   BecomeAVendorIndexRoute: typeof BecomeAVendorIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
@@ -94,18 +117,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/services/': {
-      id: '/services/'
-      path: '/services'
-      fullPath: '/services/'
-      preLoaderRoute: typeof ServicesIndexRouteImport
+    '/about/': {
+      id: '/about/'
+      path: '/about'
+      fullPath: '/about/'
+      preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact/': {
-      id: '/contact/'
-      path: '/contact'
-      fullPath: '/contact/'
-      preLoaderRoute: typeof ContactIndexRouteImport
+    '/become-a-customer/': {
+      id: '/become-a-customer/'
+      path: '/become-a-customer'
+      fullPath: '/become-a-customer/'
+      preLoaderRoute: typeof BecomeACustomerIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/become-a-vendor/': {
@@ -115,11 +138,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BecomeAVendorIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about/': {
-      id: '/about/'
-      path: '/about'
-      fullPath: '/about/'
-      preLoaderRoute: typeof AboutIndexRouteImport
+    '/contact/': {
+      id: '/contact/'
+      path: '/contact'
+      fullPath: '/contact/'
+      preLoaderRoute: typeof ContactIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/services'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -128,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutIndexRoute: AboutIndexRoute,
+  BecomeACustomerIndexRoute: BecomeACustomerIndexRoute,
   BecomeAVendorIndexRoute: BecomeAVendorIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
   ServicesIndexRoute: ServicesIndexRoute,

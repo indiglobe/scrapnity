@@ -1,4 +1,4 @@
-import { platformPhoneNo } from "@/data/const";
+import { platformPhoneNo, SHEET_URL } from "@/data/const";
 import { cn } from "@/lib/utils/cn";
 import { useForm } from "@tanstack/react-form";
 import { Info, X } from "lucide-react";
@@ -145,6 +145,9 @@ export function VendorForm() {
   const [tempPinCode, setTempPinCode] = useState("");
   const form = useForm({
     defaultValues: {
+      // this is the name of the google sheet
+      // DO NOT EDIT THIS
+      googleSheetName: "Vendor",
       name: "",
       contactNo: "",
       address: {
@@ -170,6 +173,45 @@ export function VendorForm() {
         serviceablePincode,
         scrapItems,
       } = value;
+
+      const data = {
+        googleSheetName: value.googleSheetName,
+        name: value.name,
+        aadharNo: value.aadharNo,
+        contactNo: value.contactNo,
+        streetAddress: value.address.streetAddress,
+        city: value.address.city,
+        district: value.address.district,
+        state: value.address.state,
+        pinCode: value.address.pinCode,
+        serviceablePincode: value.serviceablePincode.join(", "),
+        scrapItems: value.scrapItems.join(", "),
+      };
+
+      console.log("Submitting:", data);
+
+      try {
+        const response = await fetch(SHEET_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        console.log("Google Apps Script response:", result);
+
+        if (!result.success) {
+          throw new Error(result.error || "Failed to save customer");
+        }
+
+        alert("Pickup scheduled successfully!");
+      } catch (error) {
+        console.error("Failed to save customer:", error);
+        alert("Something went wrong. Please try again.");
+      }
 
       const details = `
 Name : ${name}
@@ -245,6 +287,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
 
             <input
               id="name"
+              name="name"
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
               className={inputClass}
@@ -275,6 +318,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
 
             <input
               id="contactNo"
+              name="contactNo"
               type="text"
               inputMode="numeric"
               maxLength={10}
@@ -310,6 +354,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
 
             <input
               id="aadharNo"
+              name="aadharNo"
               type="text"
               inputMode="numeric"
               maxLength={12}
@@ -372,6 +417,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
             ) && (
               <select
                 id="scrapItems"
+                name="scrapItems"
                 value=""
                 onChange={(e) => {
                   const value = e.target.value;
@@ -495,6 +541,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
 
               <input
                 type="text"
+                name="streetAddress"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={cn(`${inputClass}`)}
@@ -521,6 +568,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
               <label className={labelClass}>City</label>
 
               <input
+                name="city"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={inputClass}
@@ -547,6 +595,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
               <label className={labelClass}>District</label>
 
               <input
+                name="district"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={inputClass}
@@ -573,6 +622,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
               <label className={labelClass}>State</label>
 
               <input
+                name="state"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={inputClass}
@@ -601,6 +651,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
               <label className={labelClass}>Address Pincode</label>
 
               <input
+                name="pinCode"
                 type="text"
                 inputMode="numeric"
                 maxLength={6}
@@ -669,6 +720,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
               <div className={cn(`flex flex-col gap-3 sm:flex-row`)}>
                 <input
                   id="serviceablePincode"
+                  name="serviceablePincode"
                   type="text"
                   inputMode="numeric"
                   maxLength={6}

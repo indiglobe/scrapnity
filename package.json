@@ -2,6 +2,11 @@
   "name": "scrapnity",
   "private": true,
   "type": "module",
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "pnpm format"
+    ]
+  },
   "scripts": {
     "dev": "vite dev --port 3000 --open",
     "build": "vite build",
@@ -13,6 +18,7 @@
     "format": "prettier --write . && eslint --fix",
     "sb:dev": "storybook dev -p 6006 --no-open",
     "sb:build": "storybook build",
+    "lint:staged": "lint-staged",
     "check": "prettier --check ."
   },
   "dependencies": {
@@ -62,7 +68,9 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.20.0",
     "http-server": "^14.1.1",
+    "husky": "^9.1.7",
     "jsdom": "^28.1.0",
+    "lint-staged": "^17.3.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "storybook": "^10.4.6",
