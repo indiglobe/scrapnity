@@ -676,6 +676,10 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
         mode="array"
         validators={{
           onChange: ({ value }) => {
+            if (value.length === 0) {
+              return "At least one serviceable pincode is required";
+            }
+
             const invalid = value.filter((v) => !/^\d{6}$/.test(v));
 
             return invalid.length === 0

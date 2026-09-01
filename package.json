@@ -1,14 +1,7 @@
 {
   "name": "scrapnity",
-  "private": true,
-  "type": "module",
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "pnpm format"
-    ]
-  },
   "scripts": {
-    "dev": "vite dev --port 3000 --open",
+    "dev": "vite dev --open",
     "build": "vite build",
     "preview": "vite preview",
     "gen:route": "tsr generate",
@@ -77,6 +70,13 @@
     "typescript": "^6.0.2",
     "vite": "^8.0.0",
     "vitest": "^4.1.5"
+  },
+  "private": true,
+  "type": "module",
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "pnpm format"
+    ]
   },
   "pnpm": {
     "onlyBuiltDependencies": [
