@@ -5,7 +5,29 @@ import { ContactFormSection } from "@/components/main/contact/contact";
 export const Route = createFileRoute("/contact/")({
   component: RouteComponent,
 
-  head: () => ({ meta: [{ title: "Scrapnity | Contact" }] }),
+  head: () => {
+    const title = "Contact Scrapnity | Schedule Scrap Collection";
+    const description =
+      "Get in touch with Scrapnity to schedule convenient scrap collection, ask questions, or learn more about our reliable recycling services.";
+
+    return {
+      meta: [
+        { title },
+        { content: description, name: "description" },
+
+        { content: title, name: "og:title" },
+        { content: description, name: "og:description" },
+        { content: "/logo512.png", name: "og:image" },
+        { content: "https://scrapnity.in/contact", name: "og:url" },
+
+        { content: "summary_large_image", name: "twitter:card" },
+        { content: title, name: "twitter:title" },
+        { content: description, name: "twitter:description" },
+        { content: "/logo512.png", name: "twitter:image" },
+        { content: "https://scrapnity.in/contact", name: "twitter:url" },
+      ],
+    };
+  },
 });
 
 function RouteComponent() {
