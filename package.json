@@ -24,7 +24,7 @@
     "@t3-oss/env-core": "^0.13.10",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
-    "@tanstack/react-form": "latest",
+    "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-form-devtools": "^0.2.31",
     "@tanstack/react-query": "latest",
     "@tanstack/react-query-devtools": "latest",

@@ -25,7 +25,7 @@ export const signinPageSearchParams = z.object({
    * Some predefined initiator, Based on this the content of the sign in page can change
    */
   initiator: z
-    .enum(["partner-page"])
+    .enum(["partner-page", "vendor", "seller"])
     .catch("partner-page")
     .optional(),
   /**
