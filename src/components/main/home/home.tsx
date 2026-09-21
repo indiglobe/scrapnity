@@ -13,6 +13,24 @@ import {
 } from "lucide-react";
 import type { ComponentProps } from "react";
 import { heroStat, scrapCollectionStat } from "@/data/statistics";
+import Main from "../main";
+import { ProcessSection } from "@/components/scrap-processing";
+
+export function HomePage() {
+  return (
+    <Main>
+      <Hero />
+
+      <ServicesWeOffer />
+
+      <ScrapTypes />
+
+      <ProcessSection />
+
+      <FinalCTA />
+    </Main>
+  );
+}
 
 export function Hero({ className, ...props }: ComponentProps<"section">) {
   return (

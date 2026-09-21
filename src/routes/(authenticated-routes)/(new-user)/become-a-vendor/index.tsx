@@ -1,14 +1,13 @@
+import { BecomeVendor } from "@/components/main/become-a-vendor/become-a-vendor";
 import { createFileRoute } from "@tanstack/react-router";
-import Main from "@/components/main/main";
-import { ContactFormSection } from "@/components/main/contact/contact";
 
-export const Route = createFileRoute("/contact/")({
+export const Route = createFileRoute("/(authenticated-routes)/(new-user)/become-a-vendor/")({
   component: RouteComponent,
 
   head: () => {
-    const title = "Contact Scrapnity | Schedule Scrap Collection";
+    const title = "Become a Scrapnity Vendor | Partner With Us";
     const description =
-      "Get in touch with Scrapnity to schedule convenient scrap collection, ask questions, or learn more about our reliable recycling services.";
+      "Partner with Scrapnity as a vendor and grow your scrap recycling business. Join our network and build a reliable, long-term partnership.";
 
     return {
       meta: [
@@ -18,13 +17,19 @@ export const Route = createFileRoute("/contact/")({
         { content: title, name: "og:title" },
         { content: description, name: "og:description" },
         { content: "/logo512.png", name: "og:image" },
-        { content: "https://scrapnity.in/contact", name: "og:url" },
+        {
+          content: "https://scrapnity.in/become-a-vendor",
+          name: "og:url",
+        },
 
         { content: "summary_large_image", name: "twitter:card" },
         { content: title, name: "twitter:title" },
         { content: description, name: "twitter:description" },
         { content: "/logo512.png", name: "twitter:image" },
-        { content: "https://scrapnity.in/contact", name: "twitter:url" },
+        {
+          content: "https://scrapnity.in/become-a-vendor",
+          name: "twitter:url",
+        },
       ],
     };
   },
@@ -32,8 +37,8 @@ export const Route = createFileRoute("/contact/")({
 
 function RouteComponent() {
   return (
-    <Main>
-      <ContactFormSection />
-    </Main>
+    <>
+      <BecomeVendor />
+    </>
   );
 }

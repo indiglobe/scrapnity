@@ -10,6 +10,25 @@ import {
   Truck,
   Users,
 } from "lucide-react";
+import Main from "../main";
+
+export function AboutPage() {
+  return (
+    <Main>
+      <AboutHero />
+
+      <StatsSection />
+
+      <WhoWeAre />
+
+      <OurMission />
+
+      <WhyChooseUs />
+
+      <FinalCTA />
+    </Main>
+  );
+}
 
 export function AboutHero(props: ComponentProps<"section">) {
   return (

@@ -3,7 +3,7 @@ node_modules
 dist
 dist-ssr
 *.local
-.env
+.env*
 .nitro
 .tanstack
 .wrangler
@@ -14,3 +14,4 @@ todos.json
 .vscode
 .pnpm-store
 ngrok*
+localhost*.pem

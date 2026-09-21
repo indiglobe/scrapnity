@@ -13,6 +13,24 @@ import {
   UtensilsCrossed,
   Warehouse,
 } from "lucide-react";
+import Main from "../main";
+import { ProcessSection } from "@/components/scrap-processing";
+
+export function ServicePage() {
+  return (
+    <Main>
+      <Hero />
+
+      <ServicesGrid />
+
+      <WhyChooseScrapnity />
+
+      <ProcessSection />
+
+      <CTASection />
+    </Main>
+  );
+}
 
 type Service = {
   icon: React.ElementType;

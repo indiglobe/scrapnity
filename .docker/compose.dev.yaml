@@ -1,0 +1,65 @@
+name: scrapnity-dev
+
+networks:
+  scrapnity-dev:
+    driver: bridge
+
+services:
+  scrapnity-dev-database:
+    container_name: scrapnity-dev-database
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 18211:3306
+    networks:
+      - scrapnity-dev
+    volumes:
+      - database:/var/lib/mysql
+
+  scrapnity-dev-phpmyadmin:
+    container_name: scrapnity-dev-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "18067:80"
+    environment:
+      PMA_HOST: scrapnity-dev-database
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: password
+    depends_on:
+      - scrapnity-dev-database
+    networks:
+      - scrapnity-dev
+
+  scrapnity-dev-proxy:
+    container_name: scrapnity-dev-proxy
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - scrapnity-dev
+    volumes:
+      - ../nginx.secure.dev.conf:/etc/nginx/nginx.conf:ro
+      - ../localhost-cert.pem:/etc/nginx/certs/localhost-cert.pem:ro
+      - ../localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
+
+  # scrapnity-dev-adguard:
+  #   container_name: scrapnity-dev-adguardhome
+  #   image: adguard/adguardhome:edge
+  #   restart: unless-stopped
+  #   ports:
+  #     - "15042:3000/tcp"
+  #     - "53:53/tcp"
+  #     - "53:53/udp"
+  #   networks:
+  #     - scrapnity-dev
+  # volumes:
+  #   - adguard-work:/opt/adguardhome/work
+  #   - adguard-conf:/opt/adguardhome/conf
+
+volumes:
+  database:
+  # adguard-work:
+  # adguard-conf:

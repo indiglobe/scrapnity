@@ -1,14 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Main from "@/components/main/main";
-import {
-  CTASection,
-  Hero,
-  ServicesGrid,
-  WhyChooseScrapnity,
-} from "@/components/main/services/services";
-import { ProcessSection } from "@/components/scrap-processing";
+import { ServicePage } from "@/components/main/services/services";
 
-export const Route = createFileRoute("/services/")({
+export const Route = createFileRoute("/(public-routes)/services/")({
   component: RouteComponent,
 
   head: () => {
@@ -23,12 +16,9 @@ export const Route = createFileRoute("/services/")({
 
         { content: title, name: "og:title" },
         { content: description, name: "og:description" },
-        { content: "/logo512.png", name: "og:image" },
         { content: "https://scrapnity.in/services", name: "og:url" },
-
         { content: title, name: "twitter:title" },
         { content: description, name: "twitter:description" },
-        { content: "/logo512.png", name: "twitter:image" },
         { content: "https://scrapnity.in/services", name: "twitter:url" },
       ],
     };
@@ -36,17 +26,5 @@ export const Route = createFileRoute("/services/")({
 });
 
 function RouteComponent() {
-  return (
-    <Main>
-      <Hero />
-
-      <ServicesGrid />
-
-      <WhyChooseScrapnity />
-
-      <ProcessSection />
-
-      <CTASection />
-    </Main>
-  );
+  return <ServicePage />;
 }

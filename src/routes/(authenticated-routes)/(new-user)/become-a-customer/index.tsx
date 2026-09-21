@@ -1,7 +1,7 @@
 import { BecomeCustomer } from "@/components/main/become-a-customer/become-a-customer";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/become-a-customer/")({
+export const Route = createFileRoute("/(authenticated-routes)/(new-user)/become-a-customer/")({
   component: RouteComponent,
 
   head: () => {

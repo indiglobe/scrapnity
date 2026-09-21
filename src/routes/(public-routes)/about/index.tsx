@@ -1,15 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Main from "@/components/main/main";
-import {
-  AboutHero,
-  FinalCTA,
-  OurMission,
-  StatsSection,
-  WhoWeAre,
-  WhyChooseUs,
-} from "@/components/main/about/about";
+import { AboutPage } from "@/components/main/about/about";
 
-export const Route = createFileRoute("/about/")({
+export const Route = createFileRoute("/(public-routes)/about/")({
   component: RouteComponent,
 
   head: () => {
@@ -25,8 +17,6 @@ export const Route = createFileRoute("/about/")({
         { content: description, name: "og:description" },
         { content: title, name: "twitter:title" },
         { content: description, name: "twitter:description" },
-        { content: "/logo512.png", name: "og:image" },
-        { content: "/logo512.png", name: "twitter:image" },
         { content: "https://scrapnity.in/about", name: "og:url" },
         { content: "https://scrapnity.in/about", name: "twitter:url" },
       ],
@@ -35,19 +25,5 @@ export const Route = createFileRoute("/about/")({
 });
 
 function RouteComponent() {
-  return (
-    <Main>
-      <AboutHero />
-
-      <StatsSection />
-
-      <WhoWeAre />
-
-      <OurMission />
-
-      <WhyChooseUs />
-
-      <FinalCTA />
-    </Main>
-  );
+  return <AboutPage />;
 }

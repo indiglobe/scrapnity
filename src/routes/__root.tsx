@@ -27,6 +27,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       {
         title: "Scrapnity",
       },
+      { content: "/logo512.png", name: "og:image" },
+      { content: "/logo512.png", name: "twitter:image" },
     ],
     links: [
       {
@@ -35,7 +37,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
       {
         rel: "icon",
-        href: '/favicon.ico',
+        href: "/favicon.ico",
       },
     ],
   }),
