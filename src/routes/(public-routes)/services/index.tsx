@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ServicePage } from "@/components/main/services/services";
+import { ServicePage } from "@/components/main/public-routes/services/services";
 
 export const Route = createFileRoute("/(public-routes)/services/")({
   component: RouteComponent,
@@ -26,5 +26,9 @@ export const Route = createFileRoute("/(public-routes)/services/")({
 });
 
 function RouteComponent() {
-  return <ServicePage />;
+  return (
+    <>
+      <ServicePage />
+    </>
+  );
 }

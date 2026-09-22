@@ -5,7 +5,7 @@ export const Route = createFileRoute("/(authenticated-routes)/(existing-user)")(
     component: RouteComponent,
 
     beforeLoad: async () => {
-      throw redirect({ to: "/" });
+      throw redirect({ to: "/become-a-partner" });
     },
   },
 );

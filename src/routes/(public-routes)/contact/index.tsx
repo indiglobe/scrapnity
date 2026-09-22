@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Main from "@/components/main/main";
-import { ContactFormSection } from "@/components/main/contact/contact";
+import { ContactFormSection } from "@/components/main/public-routes/contact/contact";
 
 export const Route = createFileRoute("/(public-routes)/contact/")({
   component: RouteComponent,
@@ -29,8 +28,8 @@ export const Route = createFileRoute("/(public-routes)/contact/")({
 
 function RouteComponent() {
   return (
-    <Main>
+    <>
       <ContactFormSection />
-    </Main>
+    </>
   );
 }

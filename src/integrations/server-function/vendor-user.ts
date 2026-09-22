@@ -4,7 +4,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { eq } from "drizzle-orm";
 import z from "zod";
 
-export const read__OneVendorUser = createServerFn()
+export const read__OneVendorUser = createServerFn({ method: "GET" })
   .validator(z.object({ email: z.string() }))
   .handler(async ({ data }) => {
     const { email } = data;

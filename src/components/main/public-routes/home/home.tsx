@@ -12,8 +12,8 @@ import {
   Package,
 } from "lucide-react";
 import type { ComponentProps } from "react";
-import { heroStat, scrapCollectionStat } from "@/data/statistics";
-import Main from "../main";
+import { heroStat, scrapCollectionStat } from "@/database/static-statistics";
+import Main from "../../main";
 import { ProcessSection } from "@/components/scrap-processing";
 
 export function HomePage() {

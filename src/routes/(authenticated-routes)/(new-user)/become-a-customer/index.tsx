@@ -1,7 +1,10 @@
-import { BecomeCustomer } from "@/components/main/become-a-customer/become-a-customer";
+import { BecomeCustomer } from "@/components/main/authenticated-routes/become-a-customer/become-a-customer";
+import { read__AllScrapItems } from "@/integrations/server-function/scrap-items";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/(authenticated-routes)/(new-user)/become-a-customer/")({
+export const Route = createFileRoute(
+  "/(authenticated-routes)/(new-user)/become-a-customer/",
+)({
   component: RouteComponent,
 
   head: () => {
@@ -32,6 +35,12 @@ export const Route = createFileRoute("/(authenticated-routes)/(new-user)/become-
         },
       ],
     };
+  },
+
+  loader: async () => {
+    const scraps = await read__AllScrapItems();
+
+    return { scraps };
   },
 });
 

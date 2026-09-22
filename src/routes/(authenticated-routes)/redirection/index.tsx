@@ -1,4 +1,4 @@
-import { RedirectOnlyPage } from "@/components/main/redirect-signin";
+import { RedirectOnlyPage } from "@/components/main/authenticated-routes/redirection";
 import { signinPageSearchParams } from "@/utils/zod-schema/search-params-schema/signin-page";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -38,6 +38,10 @@ export const Route = createFileRoute("/(authenticated-routes)/redirection/")({
     // the application's onboarding/profile creation.
     const customerUser = await read__OneCustomerUser({ data: { email } });
     const vendorUser = await read__OneVendorUser({ data: { email } });
+
+    if (!customerUser && !vendorUser) {
+      throw redirect({ to: "/become-a-partner" });
+    }
 
     if (customerUser) {
       throw redirect({ to: "/partner/customer" });

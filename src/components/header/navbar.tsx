@@ -56,16 +56,13 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={cn(`fixed top-0 left-0 z-50 w-full`)}>
+      <section className={cn(`fixed top-0 left-0 z-50 w-full`)}>
         {/* Main Navbar */}
         <div
-          className={cn(
-            `border-b transition-all duration-300 ${
-              scrolled
-                ? "border-primary-500/10 bg-background/90 backdrop-blur-xl"
-                : "bg-background border-transparent"
-            } `,
-          )}
+          className={cn(`border-b transition-all duration-300`, {
+            "border-primary-500/10 bg-background/90 backdrop-blur-xl": scrolled,
+            "bg-background border-transparent": !scrolled,
+          })}
         >
           <div
             className={cn(
@@ -87,11 +84,11 @@ export default function Navbar() {
                     key={item.to}
                     to={item.to}
                     className={cn(
-                      `relative px-5 py-7 text-[12px] font-bold tracking-[0.18em] uppercase transition-colors duration-300 ${
-                        active
-                          ? "text-primary-500"
-                          : "text-foreground/65 hover:text-foreground"
-                      } `,
+                      `relative px-5 py-7 text-[12px] font-bold tracking-[0.18em] uppercase transition-colors duration-300`,
+                      {
+                        "text-primary-500": active,
+                        "text-foreground/65 hover:text-foreground": !active,
+                      },
                     )}
                   >
                     {item.label}
@@ -144,7 +141,7 @@ export default function Navbar() {
             </button>
           </div>
         </div>
-      </header>
+      </section>
 
       {/* Mobile Menu */}
       <div

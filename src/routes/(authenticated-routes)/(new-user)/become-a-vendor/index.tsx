@@ -1,4 +1,4 @@
-import { BecomeVendor } from "@/components/main/become-a-vendor/become-a-vendor";
+import { BecomeVendor } from "@/components/main/authenticated-routes/become-a-vendor/become-a-vendor";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(authenticated-routes)/(new-user)/become-a-vendor/")({

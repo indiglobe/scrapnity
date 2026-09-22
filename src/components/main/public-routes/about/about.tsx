@@ -10,7 +10,7 @@ import {
   Truck,
   Users,
 } from "lucide-react";
-import Main from "../main";
+import Main from "../../main";
 
 export function AboutPage() {
   return (

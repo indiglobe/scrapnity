@@ -1,4 +1,4 @@
-import { SigninPage } from "@/components/main/signin/signin";
+import { SigninPage } from "@/components/main/unauthenticated-routes/signin/signin";
 import { signinPageSearchParams } from "@/utils/zod-schema/search-params-schema/signin-page";
 import { createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";

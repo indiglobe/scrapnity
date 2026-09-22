@@ -1,7 +1,8 @@
 // import { platformPhoneNo } from "@/data/const";
-import { SHEET_URL } from "@/data/const";
+import { SHEET_URL } from "@/database/const";
 import { cn } from "@/lib/utils/cn";
 import { useForm } from "@tanstack/react-form";
+import { useLoaderData } from "@tanstack/react-router";
 
 export function BecomeCustomer() {
   return (
@@ -21,71 +22,10 @@ export function BecomeCustomer() {
   );
 }
 
-const PRICE = [
-  {
-    item: "Water Purifier",
-    price: { amount: 150, quantityUnit: "Piece" },
-  },
-  {
-    item: "Music System and Radio DVD Sound box",
-    price: { amount: 200, quantityUnit: "Piece" },
-  },
-  {
-    item: "Music System (big)",
-    price: { amount: 500, quantityUnit: "Piece" },
-  },
-  {
-    item: "Chimney",
-    price: { amount: 300, quantityUnit: "Piece" },
-  },
-  {
-    item: "CPU",
-    price: { amount: 500, quantityUnit: "Piece" },
-  },
-  {
-    item: "Monitor",
-    price: { amount: 150, quantityUnit: "Piece" },
-  },
-  {
-    item: "UPS",
-    price: { amount: 250, quantityUnit: "Piece" },
-  },
-  {
-    item: "Battery (Small)",
-    price: { amount: 100, quantityUnit: "Piece" },
-  },
-  {
-    item: "Battery (Big)",
-    price: { amount: 200, quantityUnit: "Piece" },
-  },
-  {
-    item: "Washing machine (top load)",
-    price: { amount: 500, quantityUnit: "Piece" },
-  },
-  {
-    item: "Washing machine (front load)",
-    price: { amount: 650, quantityUnit: "Piece" },
-  },
-  {
-    item: "BOX TV",
-    price: { amount: 200, quantityUnit: "Piece" },
-  },
-  {
-    item: "LED/LCD TV",
-    price: { amount: 250, quantityUnit: "Piece" },
-  },
-  {
-    item: "IRON / Copper / Brus / Adamson",
-    price: { amount: 250, quantityUnit: "Piece" },
-  },
-] as const;
-
-const PRODUCT_OPTIONS = [
-  "--select--",
-  ...PRICE.map(({ item }) => item),
-] as const;
-
 export function CustomerForm() {
+  const { scraps } = useLoaderData({
+    from: "/(authenticated-routes)/(new-user)/become-a-customer/",
+  });
   const form = useForm({
     defaultValues: {
       // this is the name of the google sheet
@@ -105,14 +45,16 @@ export function CustomerForm() {
     formId: "customer form",
 
     onSubmit: async ({ value }) => {
-      const selectedProduct = PRICE.find((item) => item.item === value.product);
+      const selectedProduct = scraps.find(
+        (item) => item.productName === value.product,
+      );
 
       const data = {
         googleSheetName: value.googleSheetName,
         name: value.name,
         number: value.number,
         product: value.product,
-        price: selectedProduct?.price.amount ?? "",
+        price: selectedProduct?.customerPrice ?? "",
         address: value.address,
         landmark: value.landmark,
         pinCode: value.pinCode,
@@ -149,20 +91,15 @@ export function CustomerForm() {
   });
 
   const inputClass = cn(`
-    border-accent-300 dark:border-accent-700
-    bg-background focus:border-primary-500
-    focus:ring-primary-500/20 w-full border px-4 py-3
-    text-sm transition-colors outline-none focus:ring-2
+    border-accent-300 dark:border-accent-700 bg-background focus:border-primary-500 focus:ring-primary-500/20 w-full border px-4 py-3 text-sm transition-colors outline-none focus:ring-2
   `);
 
-  const labelClass = cn(`
-    text-accent-700 dark:text-accent-300
-    text-xs font-semibold tracking-wide uppercase sm:text-sm
+  const labelClass =
+    cn(` text-accent-700 dark:text-accent-300 text-xs font-semibold tracking-wide uppercase sm:text-sm
   `);
 
-  const errorClass = cn(`
-    text-secondary-600 absolute top-[calc(100%+0.35rem)]
-    left-1 text-xs font-medium
+  const errorClass =
+    cn(` text-secondary-600 absolute top-[calc(100%+0.35rem)] left-1 text-xs font-medium
   `);
 
   return (
@@ -265,8 +202,8 @@ export function CustomerForm() {
         }}
       >
         {(field) => {
-          const selectedProduct = PRICE.find(
-            (item) => item.item === field.state.value,
+          const selectedProduct = scraps.find(
+            (item) => item.productName === field.state.value,
           );
 
           return (
@@ -283,15 +220,16 @@ export function CustomerForm() {
                   onChange={(e) => field.handleChange(e.target.value)}
                   className={inputClass}
                 >
-                  {PRODUCT_OPTIONS.map((product) => (
-                    <option
-                      key={product}
-                      value={product === "--select--" ? "" : product}
-                      disabled={product === "--select--"}
-                    >
-                      {product}
-                    </option>
-                  ))}
+                  <option value={"--select--"} disabled={true}>
+                    --select--
+                  </option>
+                  {scraps.map(({ productName }) => {
+                    return (
+                      <option key={productName} value={productName}>
+                        {productName}
+                      </option>
+                    );
+                  })}
                 </select>
 
                 {field.state.meta.errors.length > 0 && (
@@ -316,17 +254,17 @@ export function CustomerForm() {
                         `text-accent-900 mt-1 text-sm font-semibold`,
                       )}
                     >
-                      {selectedProduct.item}
+                      {selectedProduct.productName}
                     </p>
                   </div>
 
                   <div className={cn(`text-right`)}>
                     <div className={cn(`text-primary-600 text-2xl font-bold`)}>
-                      ₹{selectedProduct.price.amount}
+                      ₹{selectedProduct.customerPrice}
                     </div>
 
                     <div className={cn(`text-accent-500 text-xs`)}>
-                      / {selectedProduct.price.quantityUnit}
+                      / {selectedProduct.priceUnit}
                     </div>
                   </div>
                 </div>

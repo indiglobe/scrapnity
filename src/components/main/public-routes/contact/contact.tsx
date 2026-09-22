@@ -8,7 +8,7 @@ import { Label } from "@/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
 import { Textarea } from "@/ui/textarea";
 import { contactMessageGenerator } from "@/utils/contact-message-generator";
-import { platformPhoneNo } from "@/data/const";
+import { platformPhoneNo } from "@/database/const";
 
 type FormData = {
   firstName: string;

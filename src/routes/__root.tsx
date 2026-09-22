@@ -9,6 +9,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import Header from "@/components/header/header";
 import { Footer } from "@/components/footer/footer";
 import { NotFound } from "@/components/main/not-found";
+import Main from "@/components/main/main";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -54,7 +55,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <Header />
-        {children}
+        <Main>{children}</Main>
         <Footer />
         <DevTool />
         <Scripts />

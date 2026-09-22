@@ -13,7 +13,7 @@ import {
   UtensilsCrossed,
   Warehouse,
 } from "lucide-react";
-import Main from "../main";
+import Main from "../../main";
 import { ProcessSection } from "@/components/scrap-processing";
 
 export function ServicePage() {

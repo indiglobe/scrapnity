@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils/cn";
 import { ArrowRight, Mail, Phone } from "lucide-react";
 import type { ComponentProps } from "react";
 import Logo from "@/components/logo";
-import { platformEmail, platformPhoneNo } from "@/data/const";
+import { platformEmail, platformPhoneNo } from "@/database/const";
 
 const navigation = [
   {

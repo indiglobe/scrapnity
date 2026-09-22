@@ -23,6 +23,7 @@ import { Route as unauthenticatedRoutesSignInIndexRouteImport } from './routes/(
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as authenticatedRoutesexistingUserPartnerIndexRouteImport } from './routes/(authenticated-routes)/(existing-user)/partner/index'
 import { Route as authenticatedRoutesnewUserBecomeACustomerIndexRouteImport } from './routes/(authenticated-routes)/(new-user)/become-a-customer/index'
+import { Route as authenticatedRoutesnewUserBecomeAPartnerIndexRouteImport } from './routes/(authenticated-routes)/(new-user)/become-a-partner/index'
 import { Route as authenticatedRoutesnewUserBecomeAVendorIndexRouteImport } from './routes/(authenticated-routes)/(new-user)/become-a-vendor/index'
 import { Route as authenticatedRoutesexistingUserPartnerCustomerIndexRouteImport } from './routes/(authenticated-routes)/(existing-user)/partner/customer/index'
 import { Route as authenticatedRoutesexistingUserPartnerVendorIndexRouteImport } from './routes/(authenticated-routes)/(existing-user)/partner/vendor/index'
@@ -103,6 +104,12 @@ const authenticatedRoutesnewUserBecomeACustomerIndexRoute =
     path: '/become-a-customer/',
     getParentRoute: () => authenticatedRoutesRouteRoute,
   } as any)
+const authenticatedRoutesnewUserBecomeAPartnerIndexRoute =
+  authenticatedRoutesnewUserBecomeAPartnerIndexRouteImport.update({
+    id: '/(new-user)/become-a-partner/',
+    path: '/become-a-partner/',
+    getParentRoute: () => authenticatedRoutesRouteRoute,
+  } as any)
 const authenticatedRoutesnewUserBecomeAVendorIndexRoute =
   authenticatedRoutesnewUserBecomeAVendorIndexRouteImport.update({
     id: '/(new-user)/become-a-vendor/',
@@ -133,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/sign-in/': typeof unauthenticatedRoutesSignInIndexRoute
   '/partner/': typeof authenticatedRoutesexistingUserPartnerIndexRoute
   '/become-a-customer/': typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
+  '/become-a-partner/': typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
   '/become-a-vendor/': typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
   '/partner/customer/': typeof authenticatedRoutesexistingUserPartnerCustomerIndexRoute
   '/partner/vendor/': typeof authenticatedRoutesexistingUserPartnerVendorIndexRoute
@@ -148,6 +156,7 @@ export interface FileRoutesByTo {
   '/sign-in': typeof unauthenticatedRoutesSignInIndexRoute
   '/partner': typeof authenticatedRoutesexistingUserPartnerIndexRoute
   '/become-a-customer': typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
+  '/become-a-partner': typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
   '/become-a-vendor': typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
   '/partner/customer': typeof authenticatedRoutesexistingUserPartnerCustomerIndexRoute
   '/partner/vendor': typeof authenticatedRoutesexistingUserPartnerVendorIndexRoute
@@ -168,6 +177,7 @@ export interface FileRoutesById {
   '/(unauthenticated-routes)/sign-in/': typeof unauthenticatedRoutesSignInIndexRoute
   '/(authenticated-routes)/(existing-user)/partner/': typeof authenticatedRoutesexistingUserPartnerIndexRoute
   '/(authenticated-routes)/(new-user)/become-a-customer/': typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
+  '/(authenticated-routes)/(new-user)/become-a-partner/': typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
   '/(authenticated-routes)/(new-user)/become-a-vendor/': typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
   '/(authenticated-routes)/(existing-user)/partner/customer/': typeof authenticatedRoutesexistingUserPartnerCustomerIndexRoute
   '/(authenticated-routes)/(existing-user)/partner/vendor/': typeof authenticatedRoutesexistingUserPartnerVendorIndexRoute
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/sign-in/'
     | '/partner/'
     | '/become-a-customer/'
+    | '/become-a-partner/'
     | '/become-a-vendor/'
     | '/partner/customer/'
     | '/partner/vendor/'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/partner'
     | '/become-a-customer'
+    | '/become-a-partner'
     | '/become-a-vendor'
     | '/partner/customer'
     | '/partner/vendor'
@@ -219,6 +231,7 @@ export interface FileRouteTypes {
     | '/(unauthenticated-routes)/sign-in/'
     | '/(authenticated-routes)/(existing-user)/partner/'
     | '/(authenticated-routes)/(new-user)/become-a-customer/'
+    | '/(authenticated-routes)/(new-user)/become-a-partner/'
     | '/(authenticated-routes)/(new-user)/become-a-vendor/'
     | '/(authenticated-routes)/(existing-user)/partner/customer/'
     | '/(authenticated-routes)/(existing-user)/partner/vendor/'
@@ -331,6 +344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedRoutesnewUserBecomeACustomerIndexRouteImport
       parentRoute: typeof authenticatedRoutesRouteRoute
     }
+    '/(authenticated-routes)/(new-user)/become-a-partner/': {
+      id: '/(authenticated-routes)/(new-user)/become-a-partner/'
+      path: '/become-a-partner'
+      fullPath: '/become-a-partner/'
+      preLoaderRoute: typeof authenticatedRoutesnewUserBecomeAPartnerIndexRouteImport
+      parentRoute: typeof authenticatedRoutesRouteRoute
+    }
     '/(authenticated-routes)/(new-user)/become-a-vendor/': {
       id: '/(authenticated-routes)/(new-user)/become-a-vendor/'
       path: '/become-a-vendor'
@@ -381,6 +401,7 @@ interface authenticatedRoutesRouteRouteChildren {
   authenticatedRoutesnewUserRouterRoute: typeof authenticatedRoutesnewUserRouterRoute
   authenticatedRoutesRedirectionIndexRoute: typeof authenticatedRoutesRedirectionIndexRoute
   authenticatedRoutesnewUserBecomeACustomerIndexRoute: typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
+  authenticatedRoutesnewUserBecomeAPartnerIndexRoute: typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
   authenticatedRoutesnewUserBecomeAVendorIndexRoute: typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
 }
 
@@ -394,6 +415,8 @@ const authenticatedRoutesRouteRouteChildren: authenticatedRoutesRouteRouteChildr
       authenticatedRoutesRedirectionIndexRoute,
     authenticatedRoutesnewUserBecomeACustomerIndexRoute:
       authenticatedRoutesnewUserBecomeACustomerIndexRoute,
+    authenticatedRoutesnewUserBecomeAPartnerIndexRoute:
+      authenticatedRoutesnewUserBecomeAPartnerIndexRoute,
     authenticatedRoutesnewUserBecomeAVendorIndexRoute:
       authenticatedRoutesnewUserBecomeAVendorIndexRoute,
   }

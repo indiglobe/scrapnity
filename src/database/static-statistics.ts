@@ -37,12 +37,3 @@ export const scrapCollectionStat = [
     desc: "Quick collection scheduling",
   },
 ];
-
-export const scrapTypes = [
-  { title: "Iron Scrap" },
-  { title: "Copper Scrap" },
-  { title: "Aluminium Scrap" },
-  { title: "Plastic Waste" },
-  { title: "Paper Waste" },
-  { title: "E-Waste" },
-];

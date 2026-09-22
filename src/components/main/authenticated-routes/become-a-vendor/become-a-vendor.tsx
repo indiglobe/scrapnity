@@ -1,4 +1,4 @@
-import { platformPhoneNo, SHEET_URL } from "@/data/const";
+import { platformPhoneNo, SHEET_URL } from "@/database/const";
 import { cn } from "@/lib/utils/cn";
 import { useForm } from "@tanstack/react-form";
 import { Info, X } from "lucide-react";
