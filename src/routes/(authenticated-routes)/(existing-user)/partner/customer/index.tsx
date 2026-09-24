@@ -1,4 +1,4 @@
-import { Customer } from "@/components/main/authenticated-routes/partner/customer/customer";
+import { CustomerPage } from "@/components/main/authenticated-routes/partner/customer/customer";
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 import { SCRAP_COLLECTION_STATUS } from "@/database/schema";
@@ -16,7 +16,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <>
-      <Customer />
+      <CustomerPage />
     </>
   );
 }
