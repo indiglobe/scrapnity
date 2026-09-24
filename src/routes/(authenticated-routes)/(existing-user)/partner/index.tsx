@@ -1,3 +1,4 @@
+import { Partner } from "@/components/main/authenticated-routes/partner/partner";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -9,7 +10,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <>
-      <div>make a component for navigating to customer and vendor page</div>
+      <Partner />
     </>
   );
 }

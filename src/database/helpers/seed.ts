@@ -167,7 +167,7 @@ async function seedScrapItemTable() {
   ].map<typeof ScrapItemTable.$inferInsert>((item) => {
     return {
       customerPrice: item.price.customerPrice,
-      priceUnit: faker.helpers.arrayElement(PRICE_UNIT),
+      priceUnit: faker.helpers.arrayElement(PRICE_UNIT()),
       productName: item.item,
       vendorPrice: item.price.vendorPrice,
     };
@@ -266,7 +266,7 @@ async function seedScrapCollectionProcessTable() {
       landmark: faker.location.postalAddress(),
       scrapItemId: faker.helpers.arrayElement(scrapItems.map((s) => s.id)),
       scrapCollectionstatus: faker.helpers.arrayElement(
-        SCRAP_COLLECTION_STATUS,
+        SCRAP_COLLECTION_STATUS(),
       ),
     };
   });

@@ -304,25 +304,29 @@ export type TableIdentifierToken =
   | "DIST"
   | "VSCI";
 
-export const SCRAP_COLLECTION_STATUS = [
-  "order-placed",
-  "order-accepted",
-  "order-recived",
-  "payment-completed",
-  "process-completed",
-] as const;
+export function SCRAP_COLLECTION_STATUS() {
+  return [
+    "order-placed",
+    "order-accepted",
+    "order-recived",
+    "payment-completed",
+    "process-completed",
+  ] as const;
+}
 
 export function scrapCollectionStatusEnums(columnName?: string) {
   return mysqlEnum(
     columnName ?? "scrap_collection_status",
-    SCRAP_COLLECTION_STATUS,
+    SCRAP_COLLECTION_STATUS(),
   );
 }
 
-export const PRICE_UNIT = ["piece", "kilo"] as const;
+export function PRICE_UNIT() {
+  return ["piece", "kilo"] as const;
+}
 
 export function priceUnitEnums(columnName?: string) {
-  return mysqlEnum(columnName ?? "price_unit", PRICE_UNIT);
+  return mysqlEnum(columnName ?? "price_unit", PRICE_UNIT());
 }
 
 export function updatedAt(columnName?: string) {

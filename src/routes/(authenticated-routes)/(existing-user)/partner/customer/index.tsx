@@ -9,7 +9,7 @@ export const Route = createFileRoute(
   component: RouteComponent,
 
   validateSearch: z
-    .object({ status: z.enum(SCRAP_COLLECTION_STATUS).optional() })
+    .object({ status: z.enum(SCRAP_COLLECTION_STATUS()).optional() })
     .optional(),
 });
 
