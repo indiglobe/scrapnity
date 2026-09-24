@@ -1,8 +1,19 @@
 import { BecomeVendor } from "@/components/main/authenticated-routes/become-a-vendor/become-a-vendor";
+import { read__AllScrapItems } from "@/integrations/server-function/scrap-items";
+import { read__AllStates } from "@/integrations/server-function/states";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/(authenticated-routes)/(new-user)/become-a-vendor/")({
+export const Route = createFileRoute(
+  "/(authenticated-routes)/(new-user)/become-a-vendor/",
+)({
   component: RouteComponent,
+
+  loader: async () => {
+    const scraps = await read__AllScrapItems();
+    const states = await read__AllStates();
+
+    return { scraps, states };
+  },
 
   head: () => {
     const title = "Become a Scrapnity Vendor | Partner With Us";

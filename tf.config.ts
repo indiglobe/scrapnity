@@ -52,5 +52,9 @@ export default defineConfig({
       execute: "drizzle-kit push",
       envFile: ".env.development",
     },
+    "db:dev:studio": {
+      execute: "drizzle-kit studio",
+      envFile: ".env.development",
+    },
   },
 });

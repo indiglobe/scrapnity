@@ -16,6 +16,7 @@ services:
       - scrapnity-dev
     volumes:
       - database:/var/lib/mysql
+    restart: unless-stopped
 
   scrapnity-dev-phpmyadmin:
     container_name: scrapnity-dev-phpmyadmin
@@ -45,6 +46,21 @@ services:
       - ../localhost-cert.pem:/etc/nginx/certs/localhost-cert.pem:ro
       - ../localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
 
+  scrapnity-local-cloud:
+    container_name: scrapnity-local-cloud
+    image: floci/floci:nightly
+    ports:
+      - "12423:4566"
+    volumes:
+      - floci-data:/var/lib/floci
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - FLOCI_LOG_LEVEL=info
+      - FLOCI_DATA_DIR=/var/lib/floci
+    networks:
+      - scrapnity-dev
+    # restart: unless-stopped
+
   # scrapnity-dev-adguard:
   #   container_name: scrapnity-dev-adguardhome
   #   image: adguard/adguardhome:edge
@@ -61,5 +77,6 @@ services:
 
 volumes:
   database:
+  floci-data:
   # adguard-work:
   # adguard-conf:

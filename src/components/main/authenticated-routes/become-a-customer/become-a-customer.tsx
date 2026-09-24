@@ -1,8 +1,9 @@
-// import { platformPhoneNo } from "@/data/const";
-import { SHEET_URL } from "@/database/const";
+import { create__OneCustomerUser } from "@/integrations/server-function/customer-user";
 import { cn } from "@/lib/utils/cn";
+import { tryCatch } from "@/utils/try-catch";
 import { useForm } from "@tanstack/react-form";
-import { useLoaderData } from "@tanstack/react-router";
+import { useNavigate, useRouteContext } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 
 export function BecomeCustomer() {
   return (
@@ -23,70 +24,47 @@ export function BecomeCustomer() {
 }
 
 export function CustomerForm() {
-  const { scraps } = useLoaderData({
+  const createOneCustomerUser = useServerFn(create__OneCustomerUser);
+
+  const { session } = useRouteContext({
     from: "/(authenticated-routes)/(new-user)/become-a-customer/",
   });
+
+  const navigate = useNavigate();
+
   const form = useForm({
     defaultValues: {
-      // this is the name of the google sheet
-      // DO NOT EDIT THIS
-      googleSheetName: "Customers",
       name: "",
       number: "",
-      product: "",
       address: "",
-      landmark: "",
       pinCode: "",
-      floor: "",
-      pickupDate: "",
-      pickupTime: "",
     },
 
     formId: "customer form",
 
     onSubmit: async ({ value }) => {
-      const selectedProduct = scraps.find(
-        (item) => item.productName === value.product,
+      const {
+        user: { email },
+      } = session;
+
+      const [createOneCustomerUserError] = await tryCatch(
+        createOneCustomerUser({
+          data: {
+            address: value.address,
+            customerPinCode: value.pinCode,
+            email: email,
+            name: value.name,
+            phoneNumber: value.number,
+          },
+        }),
       );
 
-      const data = {
-        googleSheetName: value.googleSheetName,
-        name: value.name,
-        number: value.number,
-        product: value.product,
-        price: selectedProduct?.customerPrice ?? "",
-        address: value.address,
-        landmark: value.landmark,
-        pinCode: value.pinCode,
-        floor: value.floor,
-        pickupDate: value.pickupDate,
-        pickupTime: value.pickupTime,
-      };
-
-      console.log("Submitting:", data);
-
-      try {
-        const response = await fetch(SHEET_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-          body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-
-        console.log("Google Apps Script response:", result);
-
-        if (!result.success) {
-          throw new Error(result.error || "Failed to save customer");
-        }
-
-        alert("Pickup scheduled successfully!");
-      } catch (error) {
-        console.error("Failed to save customer:", error);
-        alert("Something went wrong. Please try again.");
+      if (createOneCustomerUserError) {
+        console.log(createOneCustomerUserError);
+        return;
       }
+
+      navigate({ to: "/partner/customer" });
     },
   });
 
@@ -117,7 +95,7 @@ export function CustomerForm() {
         className={cn(`border-accent-300 dark:border-accent-700 border-b pb-5`)}
       >
         <h1 className={cn(`text-primary-600 text-2xl font-bold sm:text-3xl`)}>
-          Schedule Your Scrap Pickup
+          Become Our Customer
         </h1>
 
         <p className={cn(`text-accent-600 mt-2 text-sm`)}>
@@ -156,178 +134,45 @@ export function CustomerForm() {
         )}
       </form.Field>
 
-      {/* Number */}
-      <form.Field
-        name="number"
-        validators={{
-          onChange: ({ value }) =>
-            /^\d{10}$/.test(value)
-              ? undefined
-              : "Enter valid 10 digit mobile number",
-        }}
-      >
-        {(field) => (
-          <div className={cn(`relative space-y-2`)}>
-            <label htmlFor="customer-number" className={labelClass}>
-              Number
-            </label>
-
-            <input
-              id="customer-number"
-              type="text"
-              name="number"
-              inputMode="numeric"
-              maxLength={10}
-              value={field.state.value}
-              onChange={(e) =>
-                field.handleChange(e.target.value.replace(/\D/g, ""))
-              }
-              className={inputClass}
-              placeholder="Please provide your 10 digit mobile number"
-            />
-
-            {field.state.meta.errors.length > 0 && (
-              <p className={errorClass}>{field.state.meta.errors[0]}</p>
-            )}
-          </div>
-        )}
-      </form.Field>
-
-      {/* Product */}
-      <form.Field
-        name="product"
-        validators={{
-          onChange: ({ value }) =>
-            value ? undefined : "Please select a product",
-        }}
-      >
-        {(field) => {
-          const selectedProduct = scraps.find(
-            (item) => item.productName === field.state.value,
-          );
-
-          return (
-            <div className={cn(`relative space-y-4`)}>
-              <div className={cn(`space-y-2`)}>
-                <label htmlFor="product" className={labelClass}>
-                  Select Your Product
-                </label>
-
-                <select
-                  id="product"
-                  name="product"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value={"--select--"} disabled={true}>
-                    --select--
-                  </option>
-                  {scraps.map(({ productName }) => {
-                    return (
-                      <option key={productName} value={productName}>
-                        {productName}
-                      </option>
-                    );
-                  })}
-                </select>
-
-                {field.state.meta.errors.length > 0 && (
-                  <p className={errorClass}>{field.state.meta.errors[0]}</p>
-                )}
-              </div>
-
-              {/* Product Price */}
-              {selectedProduct && (
-                <div
-                  className={cn(
-                    `border-primary-200 bg-primary-50 flex items-center justify-between border p-4`,
-                  )}
-                >
-                  <div>
-                    <p className={cn(`text-accent-600 text-xs font-medium`)}>
-                      Estimated Maximum Price
-                    </p>
-
-                    <p
-                      className={cn(
-                        `text-accent-900 mt-1 text-sm font-semibold`,
-                      )}
-                    >
-                      {selectedProduct.productName}
-                    </p>
-                  </div>
-
-                  <div className={cn(`text-right`)}>
-                    <div className={cn(`text-primary-600 text-2xl font-bold`)}>
-                      ₹{selectedProduct.customerPrice}
-                    </div>
-
-                    <div className={cn(`text-accent-500 text-xs`)}>
-                      / {selectedProduct.priceUnit}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        }}
-      </form.Field>
-
-      {/* Address */}
-      <form.Field
-        name="address"
-        validators={{
-          onChange: ({ value }) =>
-            value.trim() ? undefined : "Address is required",
-        }}
-      >
-        {(field) => (
-          <div className={cn(`relative space-y-2`)}>
-            <label htmlFor="address" className={labelClass}>
-              Address
-            </label>
-
-            <textarea
-              id="address"
-              name="address"
-              rows={3}
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className={cn(inputClass, `resize-none`)}
-              placeholder="Enter your complete address"
-            />
-
-            {field.state.meta.errors.length > 0 && (
-              <p className={errorClass}>{field.state.meta.errors[0]}</p>
-            )}
-          </div>
-        )}
-      </form.Field>
-
-      {/* Landmark */}
-      <form.Field name="landmark">
-        {(field) => (
-          <div className={cn(`space-y-2`)}>
-            <label htmlFor="landmark" className={labelClass}>
-              Landmark
-            </label>
-
-            <input
-              id="landmark"
-              name="landmark"
-              type="text"
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              className={inputClass}
-              placeholder="Nearby landmark"
-            />
-          </div>
-        )}
-      </form.Field>
-
       {/* PIN + Floor */}
       <div className={cn(`grid grid-cols-1 gap-6 sm:grid-cols-2`)}>
+        {/* Number */}
+        <form.Field
+          name="number"
+          validators={{
+            onChange: ({ value }) =>
+              /^\d{10}$/.test(value)
+                ? undefined
+                : "Enter valid 10 digit mobile number",
+          }}
+        >
+          {(field) => (
+            <div className={cn(`relative space-y-2`)}>
+              <label htmlFor="customer-number" className={labelClass}>
+                Number
+              </label>
+
+              <input
+                id="customer-number"
+                type="text"
+                name="number"
+                inputMode="numeric"
+                maxLength={10}
+                value={field.state.value}
+                onChange={(e) =>
+                  field.handleChange(e.target.value.replace(/\D/g, ""))
+                }
+                className={inputClass}
+                placeholder="Please provide your 10 digit mobile number"
+              />
+
+              {field.state.meta.errors.length > 0 && (
+                <p className={errorClass}>{field.state.meta.errors[0]}</p>
+              )}
+            </div>
+          )}
+        </form.Field>
+
         {/* PIN */}
         <form.Field
           name="pinCode"
@@ -364,145 +209,55 @@ export function CustomerForm() {
             </div>
           )}
         </form.Field>
-
-        {/* Floor */}
-        <form.Field
-          name="floor"
-          validators={{
-            onChange: ({ value }) =>
-              value.trim() ? undefined : "Floor is required",
-          }}
-        >
-          {(field) => (
-            <div className={cn(`relative space-y-2`)}>
-              <label htmlFor="floor" className={labelClass}>
-                Floor
-              </label>
-
-              <input
-                id="floor"
-                type="text"
-                name="floor"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className={inputClass}
-                placeholder="e.g. Ground, 1st, 2nd"
-              />
-
-              {field.state.meta.errors.length > 0 && (
-                <p className={errorClass}>{field.state.meta.errors[0]}</p>
-              )}
-            </div>
-          )}
-        </form.Field>
       </div>
 
-      {/* Schedule Pickup */}
-      <div
-        className={cn(`border-accent-300 dark:border-accent-700 border-t pt-6`)}
+      {/* Address */}
+      <form.Field
+        name="address"
+        validators={{
+          onChange: ({ value }) =>
+            value.trim() ? undefined : "Address is required",
+        }}
       >
-        <div className={cn(`mb-5`)}>
-          <h2 className={cn(`text-primary-600 text-lg font-bold sm:text-xl`)}>
-            Schedule Your Pick Up
-          </h2>
+        {(field) => (
+          <div className={cn(`relative space-y-2`)}>
+            <label htmlFor="address" className={labelClass}>
+              Address
+            </label>
 
-          <p className={cn(`text-accent-500 mt-1 text-xs`)}>
-            Select your preferred pickup date and time.
-          </p>
-        </div>
+            <textarea
+              id="address"
+              name="address"
+              rows={3}
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value)}
+              className={cn(inputClass, `resize-none`)}
+              placeholder="Enter your complete address"
+            />
 
-        <div className={cn(`grid grid-cols-1 gap-6 sm:grid-cols-2`)}>
-          {/* Date */}
-          <form.Field
-            name="pickupDate"
-            validators={{
-              onChange: ({ value }) =>
-                value ? undefined : "Pickup date is required",
-            }}
-          >
-            {(field) => (
-              <div className={cn(`relative space-y-2`)}>
-                <label htmlFor="pickupDate" className={labelClass}>
-                  Date
-                </label>
-
-                <input
-                  id="pickupDate"
-                  type="date"
-                  name="pickupDate"
-                  min={new Date().toISOString().split("T")[0]}
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={inputClass}
-                />
-
-                {field.state.meta.errors.length > 0 && (
-                  <p className={errorClass}>{field.state.meta.errors[0]}</p>
-                )}
-              </div>
+            {field.state.meta.errors.length > 0 && (
+              <p className={errorClass}>{field.state.meta.errors[0]}</p>
             )}
-          </form.Field>
-
-          {/* Time */}
-          <form.Field
-            name="pickupTime"
-            validators={{
-              onChange: ({ value }) =>
-                value ? undefined : "Pickup time is required",
-            }}
-          >
-            {(field) => (
-              <div className={cn(`relative space-y-2`)}>
-                <label htmlFor="pickupTime" className={labelClass}>
-                  Time
-                </label>
-
-                <input
-                  id="pickupTime"
-                  type="time"
-                  name="pickupTime"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={inputClass}
-                />
-
-                {field.state.meta.errors.length > 0 && (
-                  <p className={errorClass}>{field.state.meta.errors[0]}</p>
-                )}
-              </div>
-            )}
-          </form.Field>
-        </div>
-      </div>
-
-      {/* Price Information */}
-      <div
-        className={cn(
-          `border-accent-300 bg-accent-50 text-accent-600 border p-4 text-xs`,
+          </div>
         )}
-      >
-        <p>
-          The displayed price is the maximum estimated purchase price for the
-          selected item. The final price may vary depending on the actual
-          condition and inspection of the product.
-        </p>
-      </div>
+      </form.Field>
 
       {/* Submit */}
       <form.Subscribe
         selector={(state) => ({
           isValid: state.isValid,
+          isSubmitting: state.isSubmitting,
         })}
       >
         {(subscription) => (
           <button
             type="submit"
-            disabled={!subscription.isValid}
+            disabled={!subscription.isValid || subscription.isSubmitting}
             className={cn(
               `border-primary-600 bg-primary-500 hover:bg-primary-600 active:bg-primary-700 w-full border px-4 py-3 text-sm font-semibold tracking-wider text-white uppercase transition disabled:cursor-not-allowed disabled:opacity-50 sm:py-3.5`,
             )}
           >
-            Schedule Pickup
+            {subscription.isSubmitting ? "Registering..." : "Register"}
           </button>
         )}
       </form.Subscribe>

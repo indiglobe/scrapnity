@@ -13,8 +13,8 @@ import { Route as authenticatedRoutesRouteRouteImport } from './routes/(authenti
 import { Route as publicRoutesRouteRouteImport } from './routes/(public-routes)/route'
 import { Route as unauthenticatedRoutesRouteRouteImport } from './routes/(unauthenticated-routes)/route'
 import { Route as authenticatedRoutesexistingUserRouteRouteImport } from './routes/(authenticated-routes)/(existing-user)/route'
+import { Route as authenticatedRoutesnewUserRouteRouteImport } from './routes/(authenticated-routes)/(new-user)/route'
 import { Route as publicRoutesIndexRouteImport } from './routes/(public-routes)/index'
-import { Route as authenticatedRoutesnewUserRouterRouteImport } from './routes/(authenticated-routes)/(new-user)/router'
 import { Route as authenticatedRoutesRedirectionIndexRouteImport } from './routes/(authenticated-routes)/redirection/index'
 import { Route as publicRoutesAboutIndexRouteImport } from './routes/(public-routes)/about/index'
 import { Route as publicRoutesContactIndexRouteImport } from './routes/(public-routes)/contact/index'
@@ -47,17 +47,16 @@ const authenticatedRoutesexistingUserRouteRoute =
     id: '/(existing-user)',
     getParentRoute: () => authenticatedRoutesRouteRoute,
   } as any)
+const authenticatedRoutesnewUserRouteRoute =
+  authenticatedRoutesnewUserRouteRouteImport.update({
+    id: '/(new-user)',
+    getParentRoute: () => authenticatedRoutesRouteRoute,
+  } as any)
 const publicRoutesIndexRoute = publicRoutesIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => publicRoutesRouteRoute,
 } as any)
-const authenticatedRoutesnewUserRouterRoute =
-  authenticatedRoutesnewUserRouterRouteImport.update({
-    id: '/(new-user)/router',
-    path: '/router',
-    getParentRoute: () => authenticatedRoutesRouteRoute,
-  } as any)
 const authenticatedRoutesRedirectionIndexRoute =
   authenticatedRoutesRedirectionIndexRouteImport.update({
     id: '/redirection/',
@@ -100,21 +99,21 @@ const authenticatedRoutesexistingUserPartnerIndexRoute =
   } as any)
 const authenticatedRoutesnewUserBecomeACustomerIndexRoute =
   authenticatedRoutesnewUserBecomeACustomerIndexRouteImport.update({
-    id: '/(new-user)/become-a-customer/',
+    id: '/become-a-customer/',
     path: '/become-a-customer/',
-    getParentRoute: () => authenticatedRoutesRouteRoute,
+    getParentRoute: () => authenticatedRoutesnewUserRouteRoute,
   } as any)
 const authenticatedRoutesnewUserBecomeAPartnerIndexRoute =
   authenticatedRoutesnewUserBecomeAPartnerIndexRouteImport.update({
-    id: '/(new-user)/become-a-partner/',
+    id: '/become-a-partner/',
     path: '/become-a-partner/',
-    getParentRoute: () => authenticatedRoutesRouteRoute,
+    getParentRoute: () => authenticatedRoutesnewUserRouteRoute,
   } as any)
 const authenticatedRoutesnewUserBecomeAVendorIndexRoute =
   authenticatedRoutesnewUserBecomeAVendorIndexRouteImport.update({
-    id: '/(new-user)/become-a-vendor/',
+    id: '/become-a-vendor/',
     path: '/become-a-vendor/',
-    getParentRoute: () => authenticatedRoutesRouteRoute,
+    getParentRoute: () => authenticatedRoutesnewUserRouteRoute,
   } as any)
 const authenticatedRoutesexistingUserPartnerCustomerIndexRoute =
   authenticatedRoutesexistingUserPartnerCustomerIndexRouteImport.update({
@@ -131,7 +130,6 @@ const authenticatedRoutesexistingUserPartnerVendorIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof publicRoutesIndexRoute
-  '/router': typeof authenticatedRoutesnewUserRouterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/redirection/': typeof authenticatedRoutesRedirectionIndexRoute
   '/about/': typeof publicRoutesAboutIndexRoute
@@ -147,7 +145,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof publicRoutesIndexRoute
-  '/router': typeof authenticatedRoutesnewUserRouterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/redirection': typeof authenticatedRoutesRedirectionIndexRoute
   '/about': typeof publicRoutesAboutIndexRoute
@@ -167,8 +164,8 @@ export interface FileRoutesById {
   '/(public-routes)': typeof publicRoutesRouteRouteWithChildren
   '/(unauthenticated-routes)': typeof unauthenticatedRoutesRouteRouteWithChildren
   '/(authenticated-routes)/(existing-user)': typeof authenticatedRoutesexistingUserRouteRouteWithChildren
+  '/(authenticated-routes)/(new-user)': typeof authenticatedRoutesnewUserRouteRouteWithChildren
   '/(public-routes)/': typeof publicRoutesIndexRoute
-  '/(authenticated-routes)/(new-user)/router': typeof authenticatedRoutesnewUserRouterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/(authenticated-routes)/redirection/': typeof authenticatedRoutesRedirectionIndexRoute
   '/(public-routes)/about/': typeof publicRoutesAboutIndexRoute
@@ -186,7 +183,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/router'
     | '/api/auth/$'
     | '/redirection/'
     | '/about/'
@@ -202,7 +198,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/router'
     | '/api/auth/$'
     | '/redirection'
     | '/about'
@@ -221,8 +216,8 @@ export interface FileRouteTypes {
     | '/(public-routes)'
     | '/(unauthenticated-routes)'
     | '/(authenticated-routes)/(existing-user)'
+    | '/(authenticated-routes)/(new-user)'
     | '/(public-routes)/'
-    | '/(authenticated-routes)/(new-user)/router'
     | '/api/auth/$'
     | '/(authenticated-routes)/redirection/'
     | '/(public-routes)/about/'
@@ -274,19 +269,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedRoutesexistingUserRouteRouteImport
       parentRoute: typeof authenticatedRoutesRouteRoute
     }
+    '/(authenticated-routes)/(new-user)': {
+      id: '/(authenticated-routes)/(new-user)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof authenticatedRoutesnewUserRouteRouteImport
+      parentRoute: typeof authenticatedRoutesRouteRoute
+    }
     '/(public-routes)/': {
       id: '/(public-routes)/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof publicRoutesIndexRouteImport
       parentRoute: typeof publicRoutesRouteRoute
-    }
-    '/(authenticated-routes)/(new-user)/router': {
-      id: '/(authenticated-routes)/(new-user)/router'
-      path: '/router'
-      fullPath: '/router'
-      preLoaderRoute: typeof authenticatedRoutesnewUserRouterRouteImport
-      parentRoute: typeof authenticatedRoutesRouteRoute
     }
     '/(authenticated-routes)/redirection/': {
       id: '/(authenticated-routes)/redirection/'
@@ -342,21 +337,21 @@ declare module '@tanstack/react-router' {
       path: '/become-a-customer'
       fullPath: '/become-a-customer/'
       preLoaderRoute: typeof authenticatedRoutesnewUserBecomeACustomerIndexRouteImport
-      parentRoute: typeof authenticatedRoutesRouteRoute
+      parentRoute: typeof authenticatedRoutesnewUserRouteRoute
     }
     '/(authenticated-routes)/(new-user)/become-a-partner/': {
       id: '/(authenticated-routes)/(new-user)/become-a-partner/'
       path: '/become-a-partner'
       fullPath: '/become-a-partner/'
       preLoaderRoute: typeof authenticatedRoutesnewUserBecomeAPartnerIndexRouteImport
-      parentRoute: typeof authenticatedRoutesRouteRoute
+      parentRoute: typeof authenticatedRoutesnewUserRouteRoute
     }
     '/(authenticated-routes)/(new-user)/become-a-vendor/': {
       id: '/(authenticated-routes)/(new-user)/become-a-vendor/'
       path: '/become-a-vendor'
       fullPath: '/become-a-vendor/'
       preLoaderRoute: typeof authenticatedRoutesnewUserBecomeAVendorIndexRouteImport
-      parentRoute: typeof authenticatedRoutesRouteRoute
+      parentRoute: typeof authenticatedRoutesnewUserRouteRoute
     }
     '/(authenticated-routes)/(existing-user)/partner/customer/': {
       id: '/(authenticated-routes)/(existing-user)/partner/customer/'
@@ -396,29 +391,41 @@ const authenticatedRoutesexistingUserRouteRouteWithChildren =
     authenticatedRoutesexistingUserRouteRouteChildren,
   )
 
-interface authenticatedRoutesRouteRouteChildren {
-  authenticatedRoutesexistingUserRouteRoute: typeof authenticatedRoutesexistingUserRouteRouteWithChildren
-  authenticatedRoutesnewUserRouterRoute: typeof authenticatedRoutesnewUserRouterRoute
-  authenticatedRoutesRedirectionIndexRoute: typeof authenticatedRoutesRedirectionIndexRoute
+interface authenticatedRoutesnewUserRouteRouteChildren {
   authenticatedRoutesnewUserBecomeACustomerIndexRoute: typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
   authenticatedRoutesnewUserBecomeAPartnerIndexRoute: typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
   authenticatedRoutesnewUserBecomeAVendorIndexRoute: typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
 }
 
-const authenticatedRoutesRouteRouteChildren: authenticatedRoutesRouteRouteChildren =
+const authenticatedRoutesnewUserRouteRouteChildren: authenticatedRoutesnewUserRouteRouteChildren =
   {
-    authenticatedRoutesexistingUserRouteRoute:
-      authenticatedRoutesexistingUserRouteRouteWithChildren,
-    authenticatedRoutesnewUserRouterRoute:
-      authenticatedRoutesnewUserRouterRoute,
-    authenticatedRoutesRedirectionIndexRoute:
-      authenticatedRoutesRedirectionIndexRoute,
     authenticatedRoutesnewUserBecomeACustomerIndexRoute:
       authenticatedRoutesnewUserBecomeACustomerIndexRoute,
     authenticatedRoutesnewUserBecomeAPartnerIndexRoute:
       authenticatedRoutesnewUserBecomeAPartnerIndexRoute,
     authenticatedRoutesnewUserBecomeAVendorIndexRoute:
       authenticatedRoutesnewUserBecomeAVendorIndexRoute,
+  }
+
+const authenticatedRoutesnewUserRouteRouteWithChildren =
+  authenticatedRoutesnewUserRouteRoute._addFileChildren(
+    authenticatedRoutesnewUserRouteRouteChildren,
+  )
+
+interface authenticatedRoutesRouteRouteChildren {
+  authenticatedRoutesexistingUserRouteRoute: typeof authenticatedRoutesexistingUserRouteRouteWithChildren
+  authenticatedRoutesnewUserRouteRoute: typeof authenticatedRoutesnewUserRouteRouteWithChildren
+  authenticatedRoutesRedirectionIndexRoute: typeof authenticatedRoutesRedirectionIndexRoute
+}
+
+const authenticatedRoutesRouteRouteChildren: authenticatedRoutesRouteRouteChildren =
+  {
+    authenticatedRoutesexistingUserRouteRoute:
+      authenticatedRoutesexistingUserRouteRouteWithChildren,
+    authenticatedRoutesnewUserRouteRoute:
+      authenticatedRoutesnewUserRouteRouteWithChildren,
+    authenticatedRoutesRedirectionIndexRoute:
+      authenticatedRoutesRedirectionIndexRoute,
   }
 
 const authenticatedRoutesRouteRouteWithChildren =

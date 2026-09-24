@@ -1,6 +1,16 @@
-import { platformPhoneNo, SHEET_URL } from "@/database/const";
+import { read__AllDistricts } from "@/integrations/server-function/districts";
+import { create__ManyServiceablePincodes } from "@/integrations/server-function/serviceable-pincodes";
+import { create__ManyVendorScrapItem } from "@/integrations/server-function/vendor-scrap-item";
+import { create__OneVendorUser } from "@/integrations/server-function/vendor-user";
 import { cn } from "@/lib/utils/cn";
+import { tryCatch } from "@/utils/try-catch";
 import { useForm } from "@tanstack/react-form";
+import {
+  useLoaderData,
+  useNavigate,
+  useRouteContext,
+} from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Info, X } from "lucide-react";
 import { useState } from "react";
 
@@ -24,217 +34,105 @@ export function BecomeVendor() {
   );
 }
 
-const SCRAP_OPTIONS = [
-  "--select--",
-  "Window AC 1 Ton",
-  "Window AC 1.5 Ton",
-  "Window AC 2 Ton",
-  "Split AC 1 Ton",
-  "Split AC 1.5 Ton",
-  "Split AC 2 Ton",
-  "Single Door Fridge",
-  "Double Door Fridge",
-  "Washing Machine Top Load",
-  "Washing Machine Front Load",
-  "Cooler Plastic Body",
-  "Cooler Iron Body",
-  "Geyser Below 7 Ltr",
-  "Geyser 7 Ltr & Above",
-  "Chimney",
-  "Microwave",
-  "OTG Toaster",
-  "Box TV",
-  "LED/LCD TV",
-  "Mobile Keypad",
-  "Mobile Android",
-  "Mobile High End",
-] as const;
-
-const PRICE = [
-  {
-    item: "Window AC 1 Ton",
-    price: { amount: 5000, quantityUnit: "Piece" },
-  },
-  {
-    item: "Split AC 1 Ton",
-    price: { amount: 5000, quantityUnit: "Piece" },
-  },
-  {
-    item: "Window AC 1.5 Ton",
-    price: { amount: 6200, quantityUnit: "Piece" },
-  },
-  {
-    item: "Split AC 1.5 Ton",
-    price: { amount: 6200, quantityUnit: "Piece" },
-  },
-  {
-    item: "Window AC 2 Ton",
-    price: { amount: 8000, quantityUnit: "Piece" },
-  },
-  {
-    item: "Split AC 2 Ton",
-    price: { amount: 8000, quantityUnit: "Piece" },
-  },
-  {
-    item: "Single Door Fridge",
-    price: { amount: 1100, quantityUnit: "Piece" },
-  },
-  {
-    item: "Double Door Fridge",
-    price: { amount: 1500, quantityUnit: "Piece" },
-  },
-  {
-    item: "Washing Machine Top Load",
-    price: { amount: 700, quantityUnit: "Piece" },
-  },
-  {
-    item: "Washing Machine Front Load",
-    price: { amount: 1500, quantityUnit: "Piece" },
-  },
-  {
-    item: "Cooler Plastic Body",
-    price: { amount: 500, quantityUnit: "Piece" },
-  },
-  {
-    item: "Cooler Iron Body",
-    price: { amount: 1000, quantityUnit: "Piece" },
-  },
-  {
-    item: "Geyser Below 7 Ltr",
-    price: { amount: 600, quantityUnit: "Piece" },
-  },
-  {
-    item: "Geyser 7 Ltr & Above",
-    price: { amount: 1500, quantityUnit: "Piece" },
-  },
-  {
-    item: "Chimney",
-    price: { amount: 600, quantityUnit: "Piece" },
-  },
-  {
-    item: "Microwave",
-    price: { amount: 800, quantityUnit: "Piece" },
-  },
-  {
-    item: "OTG Toaster",
-    price: { amount: 500, quantityUnit: "Piece" },
-  },
-  {
-    item: "Box TV",
-    price: { amount: 300, quantityUnit: "Piece" },
-  },
-  {
-    item: "LED/LCD TV",
-    price: { amount: 400, quantityUnit: "Piece" },
-  },
-  {
-    item: "Mobile Keypad",
-    price: { amount: 250, quantityUnit: "Piece" },
-  },
-  {
-    item: "Mobile Android",
-    price: { amount: 800, quantityUnit: "Piece" },
-  },
-  {
-    item: "Mobile High End",
-    price: { amount: 1500, quantityUnit: "Piece" },
-  },
-] as const;
-
 export function VendorForm() {
+  const readAllDistricts = useServerFn(read__AllDistricts);
+  const createOneVendorUser = useServerFn(create__OneVendorUser);
+  const createManyVendorScrapItem = useServerFn(create__ManyVendorScrapItem);
+  const createManyServiceablePincodes = useServerFn(
+    create__ManyServiceablePincodes,
+  );
+
+  const navigate = useNavigate();
+
+  const { session } = useRouteContext({
+    from: "/(authenticated-routes)/(new-user)/become-a-vendor/",
+  });
+
+  const { scraps, states } = useLoaderData({
+    from: "/(authenticated-routes)/(new-user)/become-a-vendor/",
+  });
+
+  const [districts, setDistricts] = useState<
+    Awaited<ReturnType<typeof read__AllDistricts>>
+  >([]);
   const [tempPinCode, setTempPinCode] = useState("");
+
   const form = useForm({
     defaultValues: {
-      // this is the name of the google sheet
-      // DO NOT EDIT THIS
-      googleSheetName: "Vendor",
-      name: "",
-      contactNo: "",
+      name: "Debo",
+      contactNo: "2121212121",
       address: {
-        streetAddress: "",
-        city: "",
+        streetAddress: "fdfnsdnfdsl fds",
+        city: "fjfskjfnds",
         district: "",
         state: "",
-        pinCode: "",
+        pinCode: "212121",
       },
-      aadharNo: "",
+      aadharNo: "212121212121",
       serviceablePincode: [] as string[],
-      scrapItems: [] as string[],
+      scrapItems: [] as { scrapItemId: string; scrapItemName: string }[],
     },
 
     formId: "vendor form",
 
     onSubmit: async ({ value }) => {
+      console.log(value);
+
       const {
-        aadharNo,
-        address,
-        contactNo,
-        name,
-        serviceablePincode,
-        scrapItems,
-      } = value;
+        user: { email, name },
+      } = session;
 
-      const data = {
-        googleSheetName: value.googleSheetName,
-        name: value.name,
-        aadharNo: value.aadharNo,
-        contactNo: value.contactNo,
-        streetAddress: value.address.streetAddress,
-        city: value.address.city,
-        district: value.address.district,
-        state: value.address.state,
-        pinCode: value.address.pinCode,
-        serviceablePincode: value.serviceablePincode.join(", "),
-        scrapItems: value.scrapItems.join(", "),
-      };
+      const [createOneVendorUserError, createOneVendorUserResult] =
+        await tryCatch(
+          createOneVendorUser({
+            data: {
+              aadharNo: value.aadharNo,
+              city: value.address.city,
+              district: value.address.district,
+              address: value.address.streetAddress,
+              state: value.address.state,
+              email: email,
+              name: name,
+              phoneNumber: value.contactNo,
+              vendorPinCode: value.address.pinCode,
+            },
+          }),
+        );
 
-      console.log("Submitting:", data);
-
-      try {
-        const response = await fetch(SHEET_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-          body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-
-        console.log("Google Apps Script response:", result);
-
-        if (!result.success) {
-          throw new Error(result.error || "Failed to save customer");
-        }
-
-        alert("Pickup scheduled successfully!");
-      } catch (error) {
-        console.error("Failed to save customer:", error);
-        alert("Something went wrong. Please try again.");
+      if (createOneVendorUserError) {
+        console.log(createOneVendorUserError);
+        return;
       }
 
-      const details = `
-Name : ${name}
-Contact no : ${contactNo}
-Scrap item : ${scrapItems.join(", ")}
-Aadhar no : ${aadharNo}
+      const [createManyVendorScrapItemError] = await tryCatch(
+        createManyVendorScrapItem({
+          data: value.scrapItems.map((s) => ({
+            scrapItemId: s.scrapItemId,
+            vendorId: createOneVendorUserResult.id,
+          })),
+        }),
+      );
 
-Address :
-Street : ${address.streetAddress}
-City : ${address.city}
-District : ${address.district}
-State : ${address.state}
-PIN : ${address.pinCode}
+      if (createManyVendorScrapItemError) {
+        console.log(createManyVendorScrapItemError);
+        return;
+      }
 
-Serviceable Pincode : ${serviceablePincode.join(", ")}
-`;
+      const [createManyServiceablePincodesError] = await tryCatch(
+        createManyServiceablePincodes({
+          data: value.serviceablePincode.map((p) => ({
+            pinCode: p,
+            vendorId: createOneVendorUserResult.id,
+          })),
+        }),
+      );
 
-      const encodedUri = encodeURI(details);
+      if (createManyServiceablePincodesError) {
+        console.log(createManyServiceablePincodesError);
+        return;
+      }
 
-      const a = document.createElement("a");
-      a.target = "_blank";
-      a.href = `https://wa.me/${platformPhoneNo}?text=${encodedUri}`;
-      a.click();
+      navigate({ to: "/partner/vendor" });
     },
   });
 
@@ -271,6 +169,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           Register your scrap collection service details.
         </p>
       </div>
+
       {/* Name */}
       <form.Field
         name="name"
@@ -300,6 +199,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           </div>
         )}
       </form.Field>
+
       {/* Contact */}
       <form.Field
         name="contactNo"
@@ -336,6 +236,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           </div>
         )}
       </form.Field>
+
       {/* Aadhaar */}
       <form.Field
         name="aadharNo"
@@ -372,7 +273,8 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           </div>
         )}
       </form.Field>
-      {/* Scrap Items */}
+
+      {/* Scrap Items & Vendor Price Section */}
       <form.Field
         name="scrapItems"
         mode="array"
@@ -381,145 +283,154 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
             value.length === 0 ? "Select at least one scrap item" : undefined,
         }}
       >
-        {(field) => (
-          <div className={cn(`relative space-y-3`)}>
-            <label htmlFor="scrapItems" className={labelClass}>
-              Scrap Items
-            </label>
-
-            <div className={cn(`flex flex-wrap gap-2`)}>
-              {field.state.value.map((item, index) => (
-                <div
-                  key={item}
-                  className={cn(
-                    `border-primary-600 bg-primary-500 flex items-center overflow-hidden border text-sm font-medium text-white`,
-                  )}
-                >
-                  <span className={cn(`px-3 py-2`)}>{item}</span>
-
-                  <button
-                    type="button"
-                    onClick={() => field.removeValue(index)}
-                    className={cn(
-                      `border-primary-300/50 hover:bg-primary-600 border-l px-3 py-2 transition`,
-                    )}
-                    aria-label={`Remove ${item}`}
-                  >
-                    <X className={cn(`size-4`)} />
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {!(
-              field.state.value.length === SCRAP_OPTIONS.length - 1 &&
-              !field.state.value.includes("--select--")
-            ) && (
-              <select
-                id="scrapItems"
-                name="scrapItems"
-                value=""
-                onChange={(e) => {
-                  const value = e.target.value;
-
-                  if (value && !field.state.value.includes(value)) {
-                    field.pushValue(value);
-                  }
-                }}
-                className={inputClass}
-              >
-                {SCRAP_OPTIONS.filter(
-                  (s) => !field.state.value.includes(s),
-                ).map((item) => (
-                  <option
-                    key={item}
-                    value={item === "--select--" ? "" : item}
-                    disabled={item === "--select--"}
-                  >
-                    {item}
-                  </option>
-                ))}
-              </select>
-            )}
-
-            {field.state.meta.errors.length > 0 && (
-              <p className={errorClass}>{field.state.meta.errors[0]}</p>
-            )}
-          </div>
-        )}
-      </form.Field>
-      {/* Vendor Price */}
-      <form.Field name="scrapItems">
         {(field) => {
           const selectedPrices = field.state.value.map((item) => ({
             item,
-            data: PRICE.find((p) => p.item === item),
+            data: scraps.find((s) => s.productName === item.scrapItemName),
           }));
 
           return (
-            <div className={cn(`space-y-4`)}>
-              <div>
-                <h3 className={cn(labelClass)}>Vendor Price</h3>
-                <p className={cn(`text-accent-500 mt-1 text-xs`)}>
-                  The following are the maximum purchase prices allowed by
-                  Scrapnity.
-                </p>
-              </div>
+            <div className={cn(`space-y-6`)}>
+              {/* Scrap Items Input & Tags */}
+              <div className={cn(`relative space-y-3`)}>
+                <label htmlFor="scrapItems" className={labelClass}>
+                  Scrap Items
+                </label>
 
-              {selectedPrices.length === 0 ? (
-                <div
-                  className={cn(
-                    `border-accent-300 bg-accent-50 text-accent-600 rounded-md border border-dashed p-4 text-sm`,
-                  )}
-                >
-                  Select one or more scrap items to view their allowed prices.
-                </div>
-              ) : (
-                <div className={cn(`grid gap-3 sm:grid-cols-2`)}>
-                  {selectedPrices.map(({ item, data }) => (
+                <div className={cn(`flex flex-wrap gap-2`)}>
+                  {field.state.value.map((item, index) => (
                     <div
-                      key={item}
+                      key={item.scrapItemId}
                       className={cn(
-                        `border-accent-300 bg-background flex items-center justify-between rounded-lg border p-4 shadow-sm`,
+                        `border-primary-600 bg-primary-500 flex items-center overflow-hidden border text-sm font-medium text-white`,
                       )}
                     >
-                      <div>
-                        <h4 className={cn(`text-accent-900 font-semibold`)}>
-                          {item}
-                        </h4>
+                      <span className={cn(`px-3 py-2`)}>
+                        {item.scrapItemName}
+                      </span>
 
-                        {!data && (
-                          <p className={cn(`text-accent-500 mt-1 text-xs`)}>
-                            As per current market / Lot basis
-                          </p>
+                      <button
+                        type="button"
+                        onClick={() => field.removeValue(index)}
+                        className={cn(
+                          `border-primary-300/50 hover:bg-primary-600 border-l px-3 py-2 transition`,
                         )}
-                      </div>
-
-                      {data ? (
-                        <div className={cn(`text-right`)}>
-                          <div
-                            className={cn(`text-primary-600 text-xl font-bold`)}
-                          >
-                            ₹{data.price.amount}
-                          </div>
-
-                          <div className={cn(`text-accent-500 text-xs`)}>
-                            / {data.price.quantityUnit}
-                          </div>
-                        </div>
-                      ) : (
-                        <span
-                          className={cn(
-                            `bg-secondary-100 text-secondary-700 rounded-full px-3 py-1 text-xs font-medium`,
-                          )}
-                        >
-                          Market Rate
-                        </span>
-                      )}
+                        aria-label={`Remove ${item}`}
+                      >
+                        <X className={cn(`size-4`)} />
+                      </button>
                     </div>
                   ))}
                 </div>
-              )}
+
+                <select
+                  id="scrapItems"
+                  name="scrapItems"
+                  value=""
+                  onChange={(e) => {
+                    const value = e.target.value;
+
+                    if (
+                      value &&
+                      !field.state.value
+                        .map((v) => v.scrapItemId)
+                        .includes(value)
+                    ) {
+                      const selectedScrap = scraps.find((s) => s.id === value);
+
+                      if (!selectedScrap) return;
+
+                      field.pushValue({
+                        scrapItemId: selectedScrap.id,
+                        scrapItemName: selectedScrap.productName,
+                      });
+                    }
+                  }}
+                  className={inputClass}
+                >
+                  <option value="" disabled>
+                    Select an item
+                  </option>
+
+                  {scraps
+                    .filter(
+                      (s) =>
+                        !field.state.value.some(
+                          (selected) => selected.scrapItemId === s.id,
+                        ),
+                    )
+                    .map((scrap) => (
+                      <option key={scrap.id} value={scrap.id}>
+                        {scrap.productName}
+                      </option>
+                    ))}
+                </select>
+
+                {field.state.meta.errors.length > 0 && (
+                  <p className={errorClass}>{field.state.meta.errors[0]}</p>
+                )}
+              </div>
+
+              {/* Vendor Price Table */}
+              <div className={cn(`space-y-4`)}>
+                <div>
+                  <h3 className={cn(labelClass)}>Vendor Price</h3>
+                  <p className={cn(`text-accent-500 mt-1 text-xs`)}>
+                    The following are the purchase prices provided by Scrapnity.
+                  </p>
+                </div>
+
+                {selectedPrices.length === 0 ? (
+                  <div
+                    className={cn(
+                      `border-accent-300 bg-accent-50 text-accent-600 rounded-md border border-dashed p-4 text-sm`,
+                    )}
+                  >
+                    Select one or more scrap items to view their allowed prices.
+                  </div>
+                ) : (
+                  <div className={cn(`grid gap-3 sm:grid-cols-2`)}>
+                    {selectedPrices.map(({ item, data }) => (
+                      <div
+                        key={item.scrapItemId}
+                        className={cn(
+                          `border-accent-300 bg-background flex items-center justify-between rounded-lg border p-4 shadow-sm`,
+                        )}
+                      >
+                        <div>
+                          <h4 className={cn(`text-accent-900 font-semibold`)}>
+                            {item.scrapItemName}
+                          </h4>
+                        </div>
+
+                        {data ? (
+                          <div className={cn(`text-right`)}>
+                            <div
+                              className={cn(
+                                `text-primary-600 text-xl font-bold`,
+                              )}
+                            >
+                              ₹{data.vendorPrice}
+                            </div>
+
+                            <div className={cn(`text-accent-500 text-xs`)}>
+                              / {data.priceUnit}
+                            </div>
+                          </div>
+                        ) : (
+                          <span
+                            className={cn(
+                              `bg-secondary-100 text-secondary-700 rounded-full px-3 py-1 text-xs font-medium`,
+                            )}
+                          >
+                            Market Rate
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           );
         }}
@@ -582,34 +493,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           )}
         </form.Field>
 
-        {/* District */}
-        <form.Field
-          name="address.district"
-          validators={{
-            onChange: ({ value }) =>
-              value.trim() ? undefined : "District is required",
-          }}
-        >
-          {(field) => (
-            <div className={cn(`relative space-y-2`)}>
-              <label className={labelClass}>District</label>
-
-              <input
-                name="district"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className={inputClass}
-                placeholder="Your district"
-              />
-
-              {field.state.meta.errors.length > 0 && (
-                <p className={errorClass}>{field.state.meta.errors[0]}</p>
-              )}
-            </div>
-          )}
-        </form.Field>
-
-        {/* State */}
+        {/* State Dropdown */}
         <form.Field
           name="address.state"
           validators={{
@@ -621,13 +505,74 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
             <div className={cn(`relative space-y-2`)}>
               <label className={labelClass}>State</label>
 
-              <input
+              <select
                 name="state"
                 value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
+                onChange={async (e) => {
+                  const newState = e.target.value;
+                  field.handleChange(newState);
+
+                  // Reset district when state changes
+                  form.setFieldValue("address.district", "");
+                  setDistricts([]);
+
+                  if (newState) {
+                    const fetchedDistricts = await readAllDistricts({
+                      data: { stateId: newState },
+                    });
+                    setDistricts(fetchedDistricts);
+                  }
+                }}
                 className={inputClass}
-                placeholder="Your state"
-              />
+              >
+                <option value="" disabled>
+                  --select--
+                </option>
+                {states.map((st) => (
+                  <option key={st.id} value={st.id}>
+                    {st.stateName}
+                  </option>
+                ))}
+              </select>
+
+              {field.state.meta.errors.length > 0 && (
+                <p className={errorClass}>{field.state.meta.errors[0]}</p>
+              )}
+            </div>
+          )}
+        </form.Field>
+
+        {/* District Dropdown */}
+        <form.Field
+          name="address.district"
+          validators={{
+            onChange: ({ value }) =>
+              value.trim() ? undefined : "District is required",
+          }}
+        >
+          {(field) => (
+            <div className={cn(`relative space-y-2`)}>
+              <label className={labelClass}>District</label>
+
+              <select
+                name="district"
+                value={field.state.value}
+                disabled={!form.getFieldValue("address.state")}
+                onChange={(e) => field.handleChange(e.target.value)}
+                className={cn(
+                  inputClass,
+                  "disabled:cursor-not-allowed disabled:opacity-50",
+                )}
+              >
+                <option value="" disabled>
+                  --select--
+                </option>
+                {districts.map((dist) => (
+                  <option key={dist.id} value={dist.id}>
+                    {dist.districtName}
+                  </option>
+                ))}
+              </select>
 
               {field.state.meta.errors.length > 0 && (
                 <p className={errorClass}>{field.state.meta.errors[0]}</p>
@@ -670,6 +615,7 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
           )}
         </form.Field>
       </div>
+
       {/* Pincode */}
       <form.Field
         name="serviceablePincode"
@@ -778,17 +724,18 @@ Serviceable Pincode : ${serviceablePincode.join(", ")}
       <form.Subscribe
         selector={(state) => ({
           isValid: state.isValid,
+          isSubmitting: state.isSubmitting,
         })}
       >
         {(subscription) => (
           <button
             type="submit"
-            disabled={!subscription.isValid}
+            disabled={!subscription.isValid || subscription.isSubmitting}
             className={cn(
               `border-primary-600 bg-primary-500 hover:bg-primary-600 active:bg-primary-700 w-full border px-4 py-3 text-sm font-semibold tracking-wider text-white uppercase transition disabled:cursor-not-allowed disabled:opacity-50 sm:py-3.5`,
             )}
           >
-            Submit
+            {subscription.isSubmitting ? "Submitting" : "Submit"}
           </button>
         )}
       </form.Subscribe>

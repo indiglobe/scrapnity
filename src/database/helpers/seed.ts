@@ -1,11 +1,14 @@
 import { db } from "@/database/index";
 import { faker } from "@faker-js/faker";
 import {
-  ScrapItemsTable,
+  ScrapItemTable,
   VendorUserTable,
   CustomerUserTable,
-  ServiceablePincodesTable,
+  ServiceablePincodeTable,
   ScrapCollectionProcessTable,
+  StateTable,
+  DistrictTable,
+  VendorScrapItemTable,
 } from "@/database/schema";
 
 /* -------------------------------------------------------- */
@@ -27,9 +30,12 @@ function randomInt(min: number, max: number) {
 async function clearTables() {
   console.log("🧹 Clearing tables...");
 
+  await db.delete(DistrictTable);
+  await db.delete(StateTable);
+  await db.delete(VendorScrapItemTable);
   await db.delete(ScrapCollectionProcessTable);
-  await db.delete(ServiceablePincodesTable);
-  await db.delete(ScrapItemsTable);
+  await db.delete(ServiceablePincodeTable);
+  await db.delete(ScrapItemTable);
   await db.delete(CustomerUserTable);
   await db.delete(VendorUserTable);
 
@@ -93,11 +99,11 @@ async function seedCustomerUserTable() {
 }
 
 /* -------------------------------------------------------- */
-/*                         ScrapItemsTable                  */
+/*                         ScrapItemTable                  */
 /* -------------------------------------------------------- */
 
-async function seedScrapItemsTable() {
-  console.log("🔃 Seeding ScrapItemsTable...");
+async function seedScrapItemTable() {
+  console.log("🔃 Seeding ScrapItemTable...");
 
   const __dummyScrapItemss = [
     {
@@ -156,7 +162,7 @@ async function seedScrapItemsTable() {
       item: "IRON / Copper / Brus / Adamson",
       price: { vendorPrice: 250, customerPrice: 250, quantityUnit: "Piece" },
     },
-  ].map<typeof ScrapItemsTable.$inferInsert>((item) => {
+  ].map<typeof ScrapItemTable.$inferInsert>((item) => {
     return {
       customerPrice: item.price.customerPrice,
       priceUnit: "piece",
@@ -165,24 +171,50 @@ async function seedScrapItemsTable() {
     };
   });
 
-  await db.insert(ScrapItemsTable).values([...__dummyScrapItemss]);
+  await db.insert(ScrapItemTable).values([...__dummyScrapItemss]);
 
-  console.log("✅ ScrapItemsTable seeded");
+  console.log("✅ ScrapItemTable seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                ServiceablePincodesTable                  */
+/*                      VendorScrapItemTable                */
 /* -------------------------------------------------------- */
 
-async function seedServiceablePincodesTable() {
-  console.log("🔃 Seeding ServiceablePincodesTable...");
+async function seedVendorScrapItemTable() {
+  console.log("🔃 Seeding VendorScrapItemTable...");
+
+  const vendors = await db.select().from(VendorUserTable);
+  const scraps = await db.select().from(ScrapItemTable);
+
+  const __dummyVendorScrapItem: (typeof VendorScrapItemTable.$inferInsert)[] =
+    [] satisfies (typeof VendorScrapItemTable.$inferInsert)[];
+
+  vendors.forEach((v) => {
+    scraps.forEach((s) => {
+      if (randomInt(0, 10) > 5) {
+        __dummyVendorScrapItem.push({ scrapItemId: s.id, vendorId: v.id });
+      }
+    });
+  });
+
+  await db.insert(VendorScrapItemTable).values([...__dummyVendorScrapItem]);
+
+  console.log("✅ VendorScrapItemTable seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                ServiceablePincodeTable                  */
+/* -------------------------------------------------------- */
+
+async function seedServiceablePincodeTable() {
+  console.log("🔃 Seeding ServiceablePincodeTable...");
 
   const vendors = await db.select().from(VendorUserTable);
   const pincodes = Array.from({ length: 10 }, () => {
     return faker.string.numeric({ length: 6 });
   });
 
-  const __dummyServiceablePincodess: (typeof ServiceablePincodesTable.$inferInsert)[] =
+  const __dummyServiceablePincodess: (typeof ServiceablePincodeTable.$inferInsert)[] =
     [];
 
   vendors.forEach((vendor) => {
@@ -195,20 +227,20 @@ async function seedServiceablePincodesTable() {
   });
 
   await db
-    .insert(ServiceablePincodesTable)
+    .insert(ServiceablePincodeTable)
     .values([...__dummyServiceablePincodess]);
 
-  console.log("✅ ServiceablePincodesTable seeded");
+  console.log("✅ ServiceablePincodeTable seeded");
 }
 
 /* -------------------------------------------------------- */
-/*                ServiceablePincodesTable                  */
+/*                ServiceablePincodeTable                  */
 /* -------------------------------------------------------- */
 
 async function seedScrapCollectionProcessTable() {
   console.log("🔃 Seeding ScrapCollectionProcessTable...");
 
-  const scrapItems = await db.select().from(ScrapItemsTable);
+  const scrapItems = await db.select().from(ScrapItemTable);
   const customerUser = await db.select().from(CustomerUserTable);
   const vendorUser = await db.select().from(VendorUserTable);
 
@@ -230,7 +262,14 @@ async function seedScrapCollectionProcessTable() {
         "Others",
       ]),
       landmark: faker.location.postalAddress(),
-      scrapItem: faker.helpers.arrayElement(scrapItems.map((s) => s.id)),
+      scrapItemId: faker.helpers.arrayElement(scrapItems.map((s) => s.id)),
+      scrapCollectionstatus: faker.helpers.arrayElement([
+        "order_placed",
+        "order_accepted",
+        "order_recived",
+        "payment_completed",
+        "process_completed",
+      ]),
     };
   });
 
@@ -239,6 +278,75 @@ async function seedScrapCollectionProcessTable() {
     .values([...__dummyScrapCollectionProcesss]);
 
   console.log("✅ ScrapCollectionProcessTable seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                       StateTable                         */
+/* -------------------------------------------------------- */
+
+async function seedStates() {
+  console.log("🔃 Seeding States...");
+
+  const states = ["West Bengal"];
+
+  const __dummyStates = states.map((state) => {
+    return {
+      id: state.toLowerCase().split(" ").join("-"),
+      stateName: state,
+    } satisfies typeof StateTable.$inferInsert;
+  });
+
+  await db.insert(StateTable).values([...__dummyStates]);
+
+  console.log("✅ States seeded");
+}
+
+/* -------------------------------------------------------- */
+/*                      DistrictTable                       */
+/* -------------------------------------------------------- */
+
+async function seedDistricts() {
+  console.log("🔃 Seeding Districts...");
+
+  const districts = [
+    "Alipurduar",
+    "Bankura",
+    "Birbhum",
+    "Cooch Behar",
+    "Dakshin Dinajpur",
+    "Darjeeling",
+    "Hooghly",
+    "Howrah",
+    "Jalpaiguri",
+    "Jhargram",
+    "Kalimpong",
+    "Kolkata",
+    "Malda",
+    "Murshidabad",
+    "Nadia",
+    "North 24 Parganas",
+    "Paschim Bardhaman",
+    "Paschim Medinipur",
+    "Purba Bardhaman",
+    "Purba Medinipur",
+    "Purulia",
+    "South 24 Parganas",
+    "Uttar Dinajpur",
+  ];
+
+  const states = await db.select().from(StateTable);
+
+  const __dummyDistricts = districts.map((district) => {
+    return {
+      id: district.toLowerCase().split(" ").join("-"),
+      districtName: district,
+      associatedState: faker.helpers.arrayElement(states).id,
+    } satisfies typeof DistrictTable.$inferInsert;
+  });
+
+  await db.insert(DistrictTable).values([...__dummyDistricts]);
+
+  console.log("✅ Districts seeded");
 }
 
 /* -------------------------------------------------------- */
@@ -253,9 +361,12 @@ export async function seed() {
 
     await seedVendorUserTable();
     await seedCustomerUserTable();
-    await seedScrapItemsTable();
-    await seedServiceablePincodesTable();
+    await seedScrapItemTable();
+    await seedVendorScrapItemTable();
+    await seedServiceablePincodeTable();
     await seedScrapCollectionProcessTable();
+    await seedStates();
+    await seedDistricts();
 
     console.log("🎉 SEEDING COMPLETED");
 

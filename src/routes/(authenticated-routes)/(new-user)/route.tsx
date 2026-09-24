@@ -2,9 +2,7 @@ import { read__OneCustomerUser } from "@/integrations/server-function/customer-u
 import { read__OneVendorUser } from "@/integrations/server-function/vendor-user";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute(
-  "/(authenticated-routes)/(new-user)/router",
-)({
+export const Route = createFileRoute("/(authenticated-routes)/(new-user)")({
   component: RouteComponent,
 
   beforeLoad: async ({ context }) => {
