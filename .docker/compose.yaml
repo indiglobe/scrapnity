@@ -1,0 +1,32 @@
+name: scrapnity
+
+networks:
+  scrapnity-prod-local:
+    driver: bridge
+
+services:
+  app:
+    container_name: scrapnity-prod-local
+    pull_policy: "always"
+    image: "indiglobe/scrapnity"
+    build:
+      context: ../
+      dockerfile: Dockerfile
+      args:
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+        GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+        BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+        BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+        DATABASE_URL: ${DATABASE_URL}
+        APP_HOST: ${APP_HOST}
+        RAZOR_PAY_KEY: ${RAZOR_PAY_KEY}
+        RAZOR_PAY_SECRET: ${RAZOR_PAY_SECRET}
+        VITE_APP_HOST: ${VITE_APP_HOST}
+        VITE_RAZOR_PAY_KEY: ${VITE_RAZOR_PAY_KEY}
+
+    ports:
+      - 3000:3000
+    env_file:
+      - .env.production
+    networks:
+      - scrapnity-prod-local

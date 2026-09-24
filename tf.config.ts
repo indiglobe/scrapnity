@@ -18,6 +18,11 @@ export default defineConfig({
       execute: "vite build",
       envFile: ".env.production",
     },
+    "build:docker:local": {
+      execute:
+        "docker compose --env-file .env.production -f ./.docker/compose.yaml build app 2>&1 | tee docker-build.log",
+      envFile: ".env.production",
+    },
     serve: {
       execute: "node dist/server/index.mjs",
       envFile: ".env.production",

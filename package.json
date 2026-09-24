@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "tf dev",
     "build": "tf build",
+    "build:docker:local": "tf run build:docker:local",
     "preview": "vite preview",
     "gen:route": "tsr generate",
     "serve": "tf run serve",
@@ -23,10 +24,10 @@
     "@gsap/react": "^2.1.2",
     "@t3-oss/env-core": "^0.13.10",
     "@tailwindcss/vite": "^4.1.18",
-    "@tanstack/react-form": "latest",
-    "@tanstack/react-query": "latest",
-    "@tanstack/react-router": "latest",
-    "@tanstack/react-router-ssr-query": "latest",
+    "@tanstack/react-form": "^1.33.4",
+    "@tanstack/react-query": "^5.103.1",
+    "@tanstack/react-router": "^1.170.38",
+    "@tanstack/react-router-ssr-query": "^1.167.2",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
     "@tanstack/zod-adapter": "^1.167.0",
@@ -46,7 +47,7 @@
     "tailwindcss": "^4.1.18",
     "taskforge-cli": "^1.0.3",
     "tw-animate-css": "^1.3.6",
-    "zod": "^4.3.6"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^10.6.0",
