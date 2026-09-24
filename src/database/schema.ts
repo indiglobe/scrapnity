@@ -305,11 +305,11 @@ export type TableIdentifierToken =
   | "VSCI";
 
 export const SCRAP_COLLECTION_STATUS = [
-  "order_placed",
-  "order_accepted",
-  "order_recived",
-  "payment_completed",
-  "process_completed",
+  "order-placed",
+  "order-accepted",
+  "order-recived",
+  "payment-completed",
+  "process-completed",
 ] as const;
 
 export function scrapCollectionStatusEnums(columnName?: string) {

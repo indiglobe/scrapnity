@@ -9,6 +9,8 @@ import {
   StateTable,
   DistrictTable,
   VendorScrapItemTable,
+  SCRAP_COLLECTION_STATUS,
+  PRICE_UNIT,
 } from "@/database/schema";
 
 /* -------------------------------------------------------- */
@@ -165,7 +167,7 @@ async function seedScrapItemTable() {
   ].map<typeof ScrapItemTable.$inferInsert>((item) => {
     return {
       customerPrice: item.price.customerPrice,
-      priceUnit: "piece",
+      priceUnit: faker.helpers.arrayElement(PRICE_UNIT),
       productName: item.item,
       vendorPrice: item.price.vendorPrice,
     };
@@ -263,13 +265,9 @@ async function seedScrapCollectionProcessTable() {
       ]),
       landmark: faker.location.postalAddress(),
       scrapItemId: faker.helpers.arrayElement(scrapItems.map((s) => s.id)),
-      scrapCollectionstatus: faker.helpers.arrayElement([
-        "order_placed",
-        "order_accepted",
-        "order_recived",
-        "payment_completed",
-        "process_completed",
-      ]),
+      scrapCollectionstatus: faker.helpers.arrayElement(
+        SCRAP_COLLECTION_STATUS,
+      ),
     };
   });
 
