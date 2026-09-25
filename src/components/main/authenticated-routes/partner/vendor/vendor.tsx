@@ -9,6 +9,7 @@ import {
 import {
   Building2,
   CalendarDays,
+  Check,
   ChevronDown,
   Clock3,
   Loader2,
@@ -682,13 +683,13 @@ function VendorOrderList() {
 }
 
 function VendorOrderCard({
-  productName = "fdfd",
-  floor = "fdfd",
-  landmark = "fdfd",
-  productVendorPrice = 500,
-  platformFee = 50,
-  pincode = 700000,
-  collectionDateTime = new Date(Date.now()),
+  productName,
+  productVendorPrice,
+  platformFee,
+  pincode,
+  floor,
+  landmark,
+  collectionDateTime,
 }: {
   productName: string;
   productVendorPrice: number;
@@ -799,8 +800,38 @@ function VendorOrderCard({
             </p>
           </div>
         </div>
+
+        {/* ONLY NEW PART */}
+        <AcceptOrderButton amount={productVendorPrice + platformFee} />
       </div>
     </article>
+  );
+}
+
+function AcceptOrderButton({ amount }: { amount: number }) {
+  return (
+    <div className={cn(`w-full shrink-0 xl:w-auto xl:min-w-[250px]`)}>
+      <div className={cn(`flex flex-col items-stretch xl:items-end`)}>
+        <p
+          className={cn(
+            `text-foreground/35 mb-2 text-xs font-medium xl:text-right`,
+          )}
+        >
+          Pay the ₹{amount} to see the customer details 
+        </p>
+
+        <button
+          type="button"
+          className={cn(
+            `bg-primary-500 text-primary-50 flex w-full items-center justify-center gap-2 rounded-none px-6 py-3 text-sm font-black transition-all duration-300 xl:w-auto`,
+            `hover:bg-primary-600 hover:-translate-y-0.5 hover:shadow-[0_14px_35px_rgba(64,164,4,0.22)]`,
+          )}
+        >
+          <Check className={cn(`h-4 w-4`)} />
+          Accept Order with ₹{amount}
+        </button>
+      </div>
+    </div>
   );
 }
 
