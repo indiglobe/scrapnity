@@ -1,7 +1,7 @@
 import { db } from "@/database";
-import { ServiceablePincodeTable } from "@/database/schema";
+import { ServiceablePincodeTable, VendorUserTable } from "@/database/schema";
 import { createServerFn } from "@tanstack/react-start";
-import { desc, getTableColumns, inArray } from "drizzle-orm";
+import { desc, eq, getTableColumns, inArray } from "drizzle-orm";
 import z from "zod";
 
 export const create__ManyServiceablePincodes = createServerFn({
@@ -23,4 +23,55 @@ export const create__ManyServiceablePincodes = createServerFn({
       .limit(data.length);
 
     return createdServiceablePincodes;
+  });
+
+export const read__AllServiceablePincodes = createServerFn({
+  method: "GET",
+})
+  .validator(
+    z
+      .object({
+        identifier: z.union([
+          z.object({
+            vendorId: z.string(),
+          }),
+          z.object({
+            vendorEmail: z.string(),
+          }),
+        ]),
+      })
+      .optional(),
+  )
+  .handler(async ({ data }) => {
+    const { pinCode, vendorId } = getTableColumns(ServiceablePincodeTable);
+
+    const baseQuery = db
+      .select({
+        pinCode,
+        vendorId,
+      })
+      .from(ServiceablePincodeTable);
+
+    if (data?.identifier) {
+      switch (true) {
+        case "vendorId" in data.identifier:
+          baseQuery.where(
+            eq(ServiceablePincodeTable.vendorId, data.identifier.vendorId),
+          );
+          break;
+
+        case "vendorEmail" in data.identifier:
+          baseQuery.innerJoin(
+            VendorUserTable,
+            eq(ServiceablePincodeTable.vendorId, VendorUserTable.id),
+          );
+          baseQuery.where(
+            eq(VendorUserTable.email, data.identifier.vendorEmail),
+          );
+          break;
+      }
+    }
+
+    const serviceablePincodes = await baseQuery;
+    return serviceablePincodes;
   });

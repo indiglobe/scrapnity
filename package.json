@@ -13,6 +13,7 @@
     "sb:dev": "tf run sb:dev",
     "sb:build": "tf run sb:build",
     "lint:staged": "lint-staged",
+    "db:test:query": "tf run db:test:query",
     "db:dev": "tf run db:dev",
     "db:dev:setup": "tf run db:dev:setup",
     "db:dev:push": "tf run db:dev:push",
@@ -93,10 +94,5 @@
       "pnpm format"
     ]
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
-    ]
-  }
+  "packageManager": "pnpm@10.27.0"
 }

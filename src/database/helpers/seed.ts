@@ -212,15 +212,23 @@ async function seedServiceablePincodeTable() {
   console.log("🔃 Seeding ServiceablePincodeTable...");
 
   const vendors = await db.select().from(VendorUserTable);
-  const pincodes = Array.from({ length: 10 }, () => {
-    return faker.string.numeric({ length: 6 });
-  });
+
+  const uniquePincodesPool = new Set<string>();
+  while (uniquePincodesPool.size < 10) {
+    uniquePincodesPool.add(faker.string.numeric({ length: 6 }));
+  }
+  const pincodes = Array.from(uniquePincodesPool);
 
   const __dummyServiceablePincodess: (typeof ServiceablePincodeTable.$inferInsert)[] =
     [];
 
   vendors.forEach((vendor) => {
-    faker.helpers.arrayElements(pincodes, { min: 1, max: 3 }).forEach((pin) => {
+    const assignedPins = faker.helpers.arrayElements(pincodes, {
+      min: 1,
+      max: 3,
+    });
+
+    assignedPins.forEach((pin) => {
       __dummyServiceablePincodess.push({
         pinCode: pin,
         vendorId: vendor.id,
@@ -228,9 +236,11 @@ async function seedServiceablePincodeTable() {
     });
   });
 
-  await db
-    .insert(ServiceablePincodeTable)
-    .values([...__dummyServiceablePincodess]);
+  if (__dummyServiceablePincodess.length > 0) {
+    await db
+      .insert(ServiceablePincodeTable)
+      .values(__dummyServiceablePincodess); // No need to spread into a new array
+  }
 
   console.log("✅ ServiceablePincodeTable seeded");
 }

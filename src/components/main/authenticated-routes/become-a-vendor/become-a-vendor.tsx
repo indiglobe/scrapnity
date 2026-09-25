@@ -59,16 +59,16 @@ export function VendorForm() {
 
   const form = useForm({
     defaultValues: {
-      name: "Debo",
-      contactNo: "2121212121",
+      name: "",
+      contactNo: "",
       address: {
-        streetAddress: "fdfnsdnfdsl fds",
-        city: "fjfskjfnds",
+        streetAddress: "",
+        city: "",
         district: "",
         state: "",
-        pinCode: "212121",
+        pinCode: "",
       },
-      aadharNo: "212121212121",
+      aadharNo: "",
       serviceablePincode: [] as string[],
       scrapItems: [] as { scrapItemId: string; scrapItemName: string }[],
     },

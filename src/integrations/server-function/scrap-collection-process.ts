@@ -6,7 +6,7 @@ import {
 } from "@/database/schema";
 import { id } from "@/utils/id";
 import { createServerFn } from "@tanstack/react-start";
-import { eq, getTableColumns } from "drizzle-orm";
+import { eq, getTableColumns, isNull, or } from "drizzle-orm";
 import z from "zod";
 
 export const create__OneScrapCollectionProcess = createServerFn({
@@ -45,76 +45,77 @@ export const create__OneScrapCollectionProcess = createServerFn({
     return insertedProcess;
   });
 
-export const read__AllScrapCollectionProcesses = createServerFn({
+export const read__AllVendorScrapCollectionProcesses = createServerFn({
   method: "GET",
 })
   .validator(
-    z
-      .object({
-        identifier: z.union([
-          z.object({
-            customerId: z.string(),
-          }),
-          z.object({
-            vendorId: z.string(),
-          }),
-          z.object({
-            customerEmail: z.string(),
-          }),
-          z.object({
-            vendorEmail: z.string(),
-          }),
-        ]),
-      })
-      .optional(),
+    z.object({
+      identifier: z.union([
+        z.object({
+          vendorEmail: z.string(),
+        }),
+      ]),
+    }),
   )
   .handler(async ({ data }) => {
     const scrapCollectionProcessColumns = getTableColumns(
       ScrapCollectionProcessTable,
     );
+    const customerUserColumns = getTableColumns(CustomerUserTable);
+    const vendorUserColumns = getTableColumns(VendorUserTable);
+    // const serviceablePincodeColumns = getTableColumns(ServiceablePincodeTable);
 
-    const baseQuery = db
-      .select({ ...scrapCollectionProcessColumns })
-      .from(ScrapCollectionProcessTable);
+    // const vendorPincodeQuery = db
+    //   .select({
+    //     id: vendorUserColumns.id,
+    //     pinCodes: sql<string[]>`
+    //       JSON_ARRAYAGG(${serviceablePincodeColumns.pinCode})
+    //     `.as("pin_codes"),
+    //   })
+    //   .from(VendorUserTable)
+    //   .leftJoin(
+    //     ServiceablePincodeTable,
+    //     eq(VendorUserTable.email, data.identifier.vendorEmail),
+    //   )
+    //   .innerJoin(
+    //     VendorScrapItemTable,
+    //     eq(VendorScrapItemTable.vendorId, VendorUserTable.id),
+    //   )
+    //   .where(
+    //     or(
+    //       eq(VendorUserTable.email, data.identifier.vendorEmail),
+    //       isNull(ScrapCollectionProcessTable.vendorId),
+    //     ),
+    //   )
+    //   .groupBy(vendorUserColumns.id);
 
-    if (data?.identifier) {
-      if ("customerId" in data.identifier) {
-        baseQuery.where(
-          eq(
-            ScrapCollectionProcessTable.customerId,
-            data.identifier.customerId,
-          ),
-        );
-      }
+    // const [vendorPincode] = await vendorPincodeQuery;
 
-      if ("vendorId" in data.identifier) {
-        baseQuery.where(
-          eq(ScrapCollectionProcessTable.vendorId, data.identifier.vendorId),
-        );
-      }
+    const scrapFilteringQuery = db
+      .select({
+        ...scrapCollectionProcessColumns,
+        customer: { ...customerUserColumns },
+        vendor: { ...vendorUserColumns },
+      })
+      .from(ScrapCollectionProcessTable)
+      .innerJoin(
+        CustomerUserTable,
+        eq(CustomerUserTable.id, ScrapCollectionProcessTable.customerId),
+      )
+      .leftJoin(
+        VendorUserTable,
+        eq(ScrapCollectionProcessTable.vendorId, VendorUserTable.id),
+      )
+      .where(
+        or(
+          eq(VendorUserTable.email, data.identifier.vendorEmail),
+          isNull(ScrapCollectionProcessTable.vendorId),
+        ),
+      );
 
-      if ("customerEmail" in data.identifier) {
-        baseQuery
-          .innerJoin(
-            CustomerUserTable,
-            eq(CustomerUserTable.id, ScrapCollectionProcessTable.customerId),
-          )
-          .where(eq(CustomerUserTable.email, data.identifier.customerEmail));
-      }
+    const filteredScraps = await scrapFilteringQuery;
 
-      if ("vendorEmail" in data.identifier) {
-        baseQuery
-          .innerJoin(
-            VendorUserTable,
-            eq(VendorUserTable.id, ScrapCollectionProcessTable.vendorId),
-          )
-          .where(eq(VendorUserTable.email, data.identifier.vendorEmail));
-      }
-    }
-
-    const allProcesses = await baseQuery;
-
-    return allProcesses;
+    return filteredScraps;
   });
 
 // export const update__OneScrapCollectionProces = createServerFn({

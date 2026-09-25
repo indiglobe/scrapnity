@@ -7,6 +7,7 @@ WORKDIR /app
 
 # Enable pnpm
 RUN corepack enable
+RUN pnpm config set minimum-release-age 0
 
 # Copy dependency files
 COPY package.json pnpm-lock.yaml ./
@@ -71,6 +72,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 RUN corepack enable
+RUN pnpm config set minimum-release-age 0
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./

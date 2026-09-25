@@ -38,6 +38,10 @@ export default defineConfig({
       execute: "storybook build",
       envFile: ".env.production",
     },
+    "db:test:query": {
+      execute: "tsx watch ./src/database/helpers/test-query.ts",
+      envFile: ".env.development",
+    },
     "db:dev": {
       execute: "pnpm db:dev:setup && pnpm db:dev:push && pnpm db:dev:seed",
       envValues: {
