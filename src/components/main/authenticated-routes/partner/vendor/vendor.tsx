@@ -545,9 +545,12 @@ function VendorOrderHeading() {
                   onClick={() => filterOrderStatus("all")}
                   className={cn(
                     `mt-2 rounded-none border transition-all duration-300`,
-                    orderStatus === "all"
-                      ? `border-primary-500 bg-primary-500 text-primary-50 hover:bg-primary-600`
-                      : `border-primary-500 text-primary-600 hover:bg-primary-500/10 bg-transparent`,
+                    {
+                      "border-primary-500 bg-primary-500 text-primary-50 hover:bg-primary-600":
+                        orderStatus === "all",
+                      "border-primary-500 text-primary-600 hover:bg-primary-500/10 bg-transparent":
+                        !(orderStatus === "all"),
+                    },
                   )}
                 >
                   All
@@ -558,9 +561,12 @@ function VendorOrderHeading() {
                   onClick={() => filterOrderStatus("accepted")}
                   className={cn(
                     `mt-2 rounded-none border transition-all duration-300`,
-                    orderStatus === "accepted"
-                      ? `border-primary-500 bg-primary-500 text-primary-50 hover:bg-primary-600`
-                      : `border-primary-500 text-primary-600 hover:bg-primary-500/10 bg-transparent`,
+                    {
+                      "border-primary-500 bg-primary-500 text-primary-50 hover:bg-primary-600":
+                        orderStatus === "accepted",
+                      "border-primary-500 text-primary-600 hover:bg-primary-500/10 bg-transparent":
+                        !(orderStatus === "accepted"),
+                    },
                   )}
                 >
                   Accepted

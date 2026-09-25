@@ -63,33 +63,6 @@ export const read__AllVendorScrapCollectionProcesses = createServerFn({
     );
     const customerUserColumns = getTableColumns(CustomerUserTable);
     const vendorUserColumns = getTableColumns(VendorUserTable);
-    // const serviceablePincodeColumns = getTableColumns(ServiceablePincodeTable);
-
-    // const vendorPincodeQuery = db
-    //   .select({
-    //     id: vendorUserColumns.id,
-    //     pinCodes: sql<string[]>`
-    //       JSON_ARRAYAGG(${serviceablePincodeColumns.pinCode})
-    //     `.as("pin_codes"),
-    //   })
-    //   .from(VendorUserTable)
-    //   .leftJoin(
-    //     ServiceablePincodeTable,
-    //     eq(VendorUserTable.email, data.identifier.vendorEmail),
-    //   )
-    //   .innerJoin(
-    //     VendorScrapItemTable,
-    //     eq(VendorScrapItemTable.vendorId, VendorUserTable.id),
-    //   )
-    //   .where(
-    //     or(
-    //       eq(VendorUserTable.email, data.identifier.vendorEmail),
-    //       isNull(ScrapCollectionProcessTable.vendorId),
-    //     ),
-    //   )
-    //   .groupBy(vendorUserColumns.id);
-
-    // const [vendorPincode] = await vendorPincodeQuery;
 
     const scrapFilteringQuery = db
       .select({
