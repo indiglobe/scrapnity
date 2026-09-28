@@ -1,0 +1,8 @@
+.devcontainer
+.docker
+.github
+.husky
+.pnpm-store
+.tanstack
+dist
+node_modules

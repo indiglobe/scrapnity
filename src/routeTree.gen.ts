@@ -9,159 +9,467 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutIndexRouteImport } from './routes/about/index'
-import { Route as BecomeACustomerIndexRouteImport } from './routes/become-a-customer/index'
-import { Route as BecomeAVendorIndexRouteImport } from './routes/become-a-vendor/index'
-import { Route as ContactIndexRouteImport } from './routes/contact/index'
-import { Route as ServicesIndexRouteImport } from './routes/services/index'
+import { Route as authenticatedRoutesRouteRouteImport } from './routes/(authenticated-routes)/route'
+import { Route as publicRoutesRouteRouteImport } from './routes/(public-routes)/route'
+import { Route as unauthenticatedRoutesRouteRouteImport } from './routes/(unauthenticated-routes)/route'
+import { Route as authenticatedRoutesexistingUserRouteRouteImport } from './routes/(authenticated-routes)/(existing-user)/route'
+import { Route as authenticatedRoutesnewUserRouteRouteImport } from './routes/(authenticated-routes)/(new-user)/route'
+import { Route as publicRoutesIndexRouteImport } from './routes/(public-routes)/index'
+import { Route as authenticatedRoutesRedirectionIndexRouteImport } from './routes/(authenticated-routes)/redirection/index'
+import { Route as publicRoutesAboutIndexRouteImport } from './routes/(public-routes)/about/index'
+import { Route as publicRoutesContactIndexRouteImport } from './routes/(public-routes)/contact/index'
+import { Route as publicRoutesServicesIndexRouteImport } from './routes/(public-routes)/services/index'
+import { Route as unauthenticatedRoutesSignInIndexRouteImport } from './routes/(unauthenticated-routes)/sign-in/index'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as authenticatedRoutesexistingUserPartnerIndexRouteImport } from './routes/(authenticated-routes)/(existing-user)/partner/index'
+import { Route as authenticatedRoutesnewUserBecomeACustomerIndexRouteImport } from './routes/(authenticated-routes)/(new-user)/become-a-customer/index'
+import { Route as authenticatedRoutesnewUserBecomeAPartnerIndexRouteImport } from './routes/(authenticated-routes)/(new-user)/become-a-partner/index'
+import { Route as authenticatedRoutesnewUserBecomeAVendorIndexRouteImport } from './routes/(authenticated-routes)/(new-user)/become-a-vendor/index'
+import { Route as authenticatedRoutesexistingUserPartnerCustomerIndexRouteImport } from './routes/(authenticated-routes)/(existing-user)/partner/customer/index'
+import { Route as authenticatedRoutesexistingUserPartnerVendorIndexRouteImport } from './routes/(authenticated-routes)/(existing-user)/partner/vendor/index'
 
-const IndexRoute = IndexRouteImport.update({
+const authenticatedRoutesRouteRoute =
+  authenticatedRoutesRouteRouteImport.update({
+    id: '/(authenticated-routes)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const publicRoutesRouteRoute = publicRoutesRouteRouteImport.update({
+  id: '/(public-routes)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const unauthenticatedRoutesRouteRoute =
+  unauthenticatedRoutesRouteRouteImport.update({
+    id: '/(unauthenticated-routes)',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const authenticatedRoutesexistingUserRouteRoute =
+  authenticatedRoutesexistingUserRouteRouteImport.update({
+    id: '/(existing-user)',
+    getParentRoute: () => authenticatedRoutesRouteRoute,
+  } as any)
+const authenticatedRoutesnewUserRouteRoute =
+  authenticatedRoutesnewUserRouteRouteImport.update({
+    id: '/(new-user)',
+    getParentRoute: () => authenticatedRoutesRouteRoute,
+  } as any)
+const publicRoutesIndexRoute = publicRoutesIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => publicRoutesRouteRoute,
 } as any)
-const AboutIndexRoute = AboutIndexRouteImport.update({
+const authenticatedRoutesRedirectionIndexRoute =
+  authenticatedRoutesRedirectionIndexRouteImport.update({
+    id: '/redirection/',
+    path: '/redirection/',
+    getParentRoute: () => authenticatedRoutesRouteRoute,
+  } as any)
+const publicRoutesAboutIndexRoute = publicRoutesAboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
+  getParentRoute: () => publicRoutesRouteRoute,
+} as any)
+const publicRoutesContactIndexRoute =
+  publicRoutesContactIndexRouteImport.update({
+    id: '/contact/',
+    path: '/contact/',
+    getParentRoute: () => publicRoutesRouteRoute,
+  } as any)
+const publicRoutesServicesIndexRoute =
+  publicRoutesServicesIndexRouteImport.update({
+    id: '/services/',
+    path: '/services/',
+    getParentRoute: () => publicRoutesRouteRoute,
+  } as any)
+const unauthenticatedRoutesSignInIndexRoute =
+  unauthenticatedRoutesSignInIndexRouteImport.update({
+    id: '/sign-in/',
+    path: '/sign-in/',
+    getParentRoute: () => unauthenticatedRoutesRouteRoute,
+  } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BecomeACustomerIndexRoute = BecomeACustomerIndexRouteImport.update({
-  id: '/become-a-customer/',
-  path: '/become-a-customer/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BecomeAVendorIndexRoute = BecomeAVendorIndexRouteImport.update({
-  id: '/become-a-vendor/',
-  path: '/become-a-vendor/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactIndexRoute = ContactIndexRouteImport.update({
-  id: '/contact/',
-  path: '/contact/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesIndexRoute = ServicesIndexRouteImport.update({
-  id: '/services/',
-  path: '/services/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const authenticatedRoutesexistingUserPartnerIndexRoute =
+  authenticatedRoutesexistingUserPartnerIndexRouteImport.update({
+    id: '/partner/',
+    path: '/partner/',
+    getParentRoute: () => authenticatedRoutesexistingUserRouteRoute,
+  } as any)
+const authenticatedRoutesnewUserBecomeACustomerIndexRoute =
+  authenticatedRoutesnewUserBecomeACustomerIndexRouteImport.update({
+    id: '/become-a-customer/',
+    path: '/become-a-customer/',
+    getParentRoute: () => authenticatedRoutesnewUserRouteRoute,
+  } as any)
+const authenticatedRoutesnewUserBecomeAPartnerIndexRoute =
+  authenticatedRoutesnewUserBecomeAPartnerIndexRouteImport.update({
+    id: '/become-a-partner/',
+    path: '/become-a-partner/',
+    getParentRoute: () => authenticatedRoutesnewUserRouteRoute,
+  } as any)
+const authenticatedRoutesnewUserBecomeAVendorIndexRoute =
+  authenticatedRoutesnewUserBecomeAVendorIndexRouteImport.update({
+    id: '/become-a-vendor/',
+    path: '/become-a-vendor/',
+    getParentRoute: () => authenticatedRoutesnewUserRouteRoute,
+  } as any)
+const authenticatedRoutesexistingUserPartnerCustomerIndexRoute =
+  authenticatedRoutesexistingUserPartnerCustomerIndexRouteImport.update({
+    id: '/partner/customer/',
+    path: '/partner/customer/',
+    getParentRoute: () => authenticatedRoutesexistingUserRouteRoute,
+  } as any)
+const authenticatedRoutesexistingUserPartnerVendorIndexRoute =
+  authenticatedRoutesexistingUserPartnerVendorIndexRouteImport.update({
+    id: '/partner/vendor/',
+    path: '/partner/vendor/',
+    getParentRoute: () => authenticatedRoutesexistingUserRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about/': typeof AboutIndexRoute
-  '/become-a-customer/': typeof BecomeACustomerIndexRoute
-  '/become-a-vendor/': typeof BecomeAVendorIndexRoute
-  '/contact/': typeof ContactIndexRoute
-  '/services/': typeof ServicesIndexRoute
+  '/': typeof publicRoutesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/redirection/': typeof authenticatedRoutesRedirectionIndexRoute
+  '/about/': typeof publicRoutesAboutIndexRoute
+  '/contact/': typeof publicRoutesContactIndexRoute
+  '/services/': typeof publicRoutesServicesIndexRoute
+  '/sign-in/': typeof unauthenticatedRoutesSignInIndexRoute
+  '/partner/': typeof authenticatedRoutesexistingUserPartnerIndexRoute
+  '/become-a-customer/': typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
+  '/become-a-partner/': typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
+  '/become-a-vendor/': typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
+  '/partner/customer/': typeof authenticatedRoutesexistingUserPartnerCustomerIndexRoute
+  '/partner/vendor/': typeof authenticatedRoutesexistingUserPartnerVendorIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutIndexRoute
-  '/become-a-customer': typeof BecomeACustomerIndexRoute
-  '/become-a-vendor': typeof BecomeAVendorIndexRoute
-  '/contact': typeof ContactIndexRoute
-  '/services': typeof ServicesIndexRoute
+  '/': typeof publicRoutesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/redirection': typeof authenticatedRoutesRedirectionIndexRoute
+  '/about': typeof publicRoutesAboutIndexRoute
+  '/contact': typeof publicRoutesContactIndexRoute
+  '/services': typeof publicRoutesServicesIndexRoute
+  '/sign-in': typeof unauthenticatedRoutesSignInIndexRoute
+  '/partner': typeof authenticatedRoutesexistingUserPartnerIndexRoute
+  '/become-a-customer': typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
+  '/become-a-partner': typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
+  '/become-a-vendor': typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
+  '/partner/customer': typeof authenticatedRoutesexistingUserPartnerCustomerIndexRoute
+  '/partner/vendor': typeof authenticatedRoutesexistingUserPartnerVendorIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about/': typeof AboutIndexRoute
-  '/become-a-customer/': typeof BecomeACustomerIndexRoute
-  '/become-a-vendor/': typeof BecomeAVendorIndexRoute
-  '/contact/': typeof ContactIndexRoute
-  '/services/': typeof ServicesIndexRoute
+  '/(authenticated-routes)': typeof authenticatedRoutesRouteRouteWithChildren
+  '/(public-routes)': typeof publicRoutesRouteRouteWithChildren
+  '/(unauthenticated-routes)': typeof unauthenticatedRoutesRouteRouteWithChildren
+  '/(authenticated-routes)/(existing-user)': typeof authenticatedRoutesexistingUserRouteRouteWithChildren
+  '/(authenticated-routes)/(new-user)': typeof authenticatedRoutesnewUserRouteRouteWithChildren
+  '/(public-routes)/': typeof publicRoutesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/(authenticated-routes)/redirection/': typeof authenticatedRoutesRedirectionIndexRoute
+  '/(public-routes)/about/': typeof publicRoutesAboutIndexRoute
+  '/(public-routes)/contact/': typeof publicRoutesContactIndexRoute
+  '/(public-routes)/services/': typeof publicRoutesServicesIndexRoute
+  '/(unauthenticated-routes)/sign-in/': typeof unauthenticatedRoutesSignInIndexRoute
+  '/(authenticated-routes)/(existing-user)/partner/': typeof authenticatedRoutesexistingUserPartnerIndexRoute
+  '/(authenticated-routes)/(new-user)/become-a-customer/': typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
+  '/(authenticated-routes)/(new-user)/become-a-partner/': typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
+  '/(authenticated-routes)/(new-user)/become-a-vendor/': typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
+  '/(authenticated-routes)/(existing-user)/partner/customer/': typeof authenticatedRoutesexistingUserPartnerCustomerIndexRoute
+  '/(authenticated-routes)/(existing-user)/partner/vendor/': typeof authenticatedRoutesexistingUserPartnerVendorIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api/auth/$'
+    | '/redirection/'
     | '/about/'
-    | '/become-a-customer/'
-    | '/become-a-vendor/'
     | '/contact/'
     | '/services/'
+    | '/sign-in/'
+    | '/partner/'
+    | '/become-a-customer/'
+    | '/become-a-partner/'
+    | '/become-a-vendor/'
+    | '/partner/customer/'
+    | '/partner/vendor/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/auth/$'
+    | '/redirection'
     | '/about'
-    | '/become-a-customer'
-    | '/become-a-vendor'
     | '/contact'
     | '/services'
+    | '/sign-in'
+    | '/partner'
+    | '/become-a-customer'
+    | '/become-a-partner'
+    | '/become-a-vendor'
+    | '/partner/customer'
+    | '/partner/vendor'
   id:
     | '__root__'
-    | '/'
-    | '/about/'
-    | '/become-a-customer/'
-    | '/become-a-vendor/'
-    | '/contact/'
-    | '/services/'
+    | '/(authenticated-routes)'
+    | '/(public-routes)'
+    | '/(unauthenticated-routes)'
+    | '/(authenticated-routes)/(existing-user)'
+    | '/(authenticated-routes)/(new-user)'
+    | '/(public-routes)/'
+    | '/api/auth/$'
+    | '/(authenticated-routes)/redirection/'
+    | '/(public-routes)/about/'
+    | '/(public-routes)/contact/'
+    | '/(public-routes)/services/'
+    | '/(unauthenticated-routes)/sign-in/'
+    | '/(authenticated-routes)/(existing-user)/partner/'
+    | '/(authenticated-routes)/(new-user)/become-a-customer/'
+    | '/(authenticated-routes)/(new-user)/become-a-partner/'
+    | '/(authenticated-routes)/(new-user)/become-a-vendor/'
+    | '/(authenticated-routes)/(existing-user)/partner/customer/'
+    | '/(authenticated-routes)/(existing-user)/partner/vendor/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutIndexRoute: typeof AboutIndexRoute
-  BecomeACustomerIndexRoute: typeof BecomeACustomerIndexRoute
-  BecomeAVendorIndexRoute: typeof BecomeAVendorIndexRoute
-  ContactIndexRoute: typeof ContactIndexRoute
-  ServicesIndexRoute: typeof ServicesIndexRoute
+  authenticatedRoutesRouteRoute: typeof authenticatedRoutesRouteRouteWithChildren
+  publicRoutesRouteRoute: typeof publicRoutesRouteRouteWithChildren
+  unauthenticatedRoutesRouteRoute: typeof unauthenticatedRoutesRouteRouteWithChildren
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/(authenticated-routes)': {
+      id: '/(authenticated-routes)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof authenticatedRoutesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(public-routes)': {
+      id: '/(public-routes)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof publicRoutesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(unauthenticated-routes)': {
+      id: '/(unauthenticated-routes)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof unauthenticatedRoutesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(authenticated-routes)/(existing-user)': {
+      id: '/(authenticated-routes)/(existing-user)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof authenticatedRoutesexistingUserRouteRouteImport
+      parentRoute: typeof authenticatedRoutesRouteRoute
+    }
+    '/(authenticated-routes)/(new-user)': {
+      id: '/(authenticated-routes)/(new-user)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof authenticatedRoutesnewUserRouteRouteImport
+      parentRoute: typeof authenticatedRoutesRouteRoute
+    }
+    '/(public-routes)/': {
+      id: '/(public-routes)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof publicRoutesIndexRouteImport
+      parentRoute: typeof publicRoutesRouteRoute
     }
-    '/about/': {
-      id: '/about/'
+    '/(authenticated-routes)/redirection/': {
+      id: '/(authenticated-routes)/redirection/'
+      path: '/redirection'
+      fullPath: '/redirection/'
+      preLoaderRoute: typeof authenticatedRoutesRedirectionIndexRouteImport
+      parentRoute: typeof authenticatedRoutesRouteRoute
+    }
+    '/(public-routes)/about/': {
+      id: '/(public-routes)/about/'
       path: '/about'
       fullPath: '/about/'
-      preLoaderRoute: typeof AboutIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof publicRoutesAboutIndexRouteImport
+      parentRoute: typeof publicRoutesRouteRoute
     }
-    '/become-a-customer/': {
-      id: '/become-a-customer/'
-      path: '/become-a-customer'
-      fullPath: '/become-a-customer/'
-      preLoaderRoute: typeof BecomeACustomerIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/become-a-vendor/': {
-      id: '/become-a-vendor/'
-      path: '/become-a-vendor'
-      fullPath: '/become-a-vendor/'
-      preLoaderRoute: typeof BecomeAVendorIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact/': {
-      id: '/contact/'
+    '/(public-routes)/contact/': {
+      id: '/(public-routes)/contact/'
       path: '/contact'
       fullPath: '/contact/'
-      preLoaderRoute: typeof ContactIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof publicRoutesContactIndexRouteImport
+      parentRoute: typeof publicRoutesRouteRoute
     }
-    '/services/': {
-      id: '/services/'
+    '/(public-routes)/services/': {
+      id: '/(public-routes)/services/'
       path: '/services'
       fullPath: '/services/'
-      preLoaderRoute: typeof ServicesIndexRouteImport
+      preLoaderRoute: typeof publicRoutesServicesIndexRouteImport
+      parentRoute: typeof publicRoutesRouteRoute
+    }
+    '/(unauthenticated-routes)/sign-in/': {
+      id: '/(unauthenticated-routes)/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in/'
+      preLoaderRoute: typeof unauthenticatedRoutesSignInIndexRouteImport
+      parentRoute: typeof unauthenticatedRoutesRouteRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(authenticated-routes)/(existing-user)/partner/': {
+      id: '/(authenticated-routes)/(existing-user)/partner/'
+      path: '/partner'
+      fullPath: '/partner/'
+      preLoaderRoute: typeof authenticatedRoutesexistingUserPartnerIndexRouteImport
+      parentRoute: typeof authenticatedRoutesexistingUserRouteRoute
+    }
+    '/(authenticated-routes)/(new-user)/become-a-customer/': {
+      id: '/(authenticated-routes)/(new-user)/become-a-customer/'
+      path: '/become-a-customer'
+      fullPath: '/become-a-customer/'
+      preLoaderRoute: typeof authenticatedRoutesnewUserBecomeACustomerIndexRouteImport
+      parentRoute: typeof authenticatedRoutesnewUserRouteRoute
+    }
+    '/(authenticated-routes)/(new-user)/become-a-partner/': {
+      id: '/(authenticated-routes)/(new-user)/become-a-partner/'
+      path: '/become-a-partner'
+      fullPath: '/become-a-partner/'
+      preLoaderRoute: typeof authenticatedRoutesnewUserBecomeAPartnerIndexRouteImport
+      parentRoute: typeof authenticatedRoutesnewUserRouteRoute
+    }
+    '/(authenticated-routes)/(new-user)/become-a-vendor/': {
+      id: '/(authenticated-routes)/(new-user)/become-a-vendor/'
+      path: '/become-a-vendor'
+      fullPath: '/become-a-vendor/'
+      preLoaderRoute: typeof authenticatedRoutesnewUserBecomeAVendorIndexRouteImport
+      parentRoute: typeof authenticatedRoutesnewUserRouteRoute
+    }
+    '/(authenticated-routes)/(existing-user)/partner/customer/': {
+      id: '/(authenticated-routes)/(existing-user)/partner/customer/'
+      path: '/partner/customer'
+      fullPath: '/partner/customer/'
+      preLoaderRoute: typeof authenticatedRoutesexistingUserPartnerCustomerIndexRouteImport
+      parentRoute: typeof authenticatedRoutesexistingUserRouteRoute
+    }
+    '/(authenticated-routes)/(existing-user)/partner/vendor/': {
+      id: '/(authenticated-routes)/(existing-user)/partner/vendor/'
+      path: '/partner/vendor'
+      fullPath: '/partner/vendor/'
+      preLoaderRoute: typeof authenticatedRoutesexistingUserPartnerVendorIndexRouteImport
+      parentRoute: typeof authenticatedRoutesexistingUserRouteRoute
     }
   }
 }
 
+interface authenticatedRoutesexistingUserRouteRouteChildren {
+  authenticatedRoutesexistingUserPartnerIndexRoute: typeof authenticatedRoutesexistingUserPartnerIndexRoute
+  authenticatedRoutesexistingUserPartnerCustomerIndexRoute: typeof authenticatedRoutesexistingUserPartnerCustomerIndexRoute
+  authenticatedRoutesexistingUserPartnerVendorIndexRoute: typeof authenticatedRoutesexistingUserPartnerVendorIndexRoute
+}
+
+const authenticatedRoutesexistingUserRouteRouteChildren: authenticatedRoutesexistingUserRouteRouteChildren =
+  {
+    authenticatedRoutesexistingUserPartnerIndexRoute:
+      authenticatedRoutesexistingUserPartnerIndexRoute,
+    authenticatedRoutesexistingUserPartnerCustomerIndexRoute:
+      authenticatedRoutesexistingUserPartnerCustomerIndexRoute,
+    authenticatedRoutesexistingUserPartnerVendorIndexRoute:
+      authenticatedRoutesexistingUserPartnerVendorIndexRoute,
+  }
+
+const authenticatedRoutesexistingUserRouteRouteWithChildren =
+  authenticatedRoutesexistingUserRouteRoute._addFileChildren(
+    authenticatedRoutesexistingUserRouteRouteChildren,
+  )
+
+interface authenticatedRoutesnewUserRouteRouteChildren {
+  authenticatedRoutesnewUserBecomeACustomerIndexRoute: typeof authenticatedRoutesnewUserBecomeACustomerIndexRoute
+  authenticatedRoutesnewUserBecomeAPartnerIndexRoute: typeof authenticatedRoutesnewUserBecomeAPartnerIndexRoute
+  authenticatedRoutesnewUserBecomeAVendorIndexRoute: typeof authenticatedRoutesnewUserBecomeAVendorIndexRoute
+}
+
+const authenticatedRoutesnewUserRouteRouteChildren: authenticatedRoutesnewUserRouteRouteChildren =
+  {
+    authenticatedRoutesnewUserBecomeACustomerIndexRoute:
+      authenticatedRoutesnewUserBecomeACustomerIndexRoute,
+    authenticatedRoutesnewUserBecomeAPartnerIndexRoute:
+      authenticatedRoutesnewUserBecomeAPartnerIndexRoute,
+    authenticatedRoutesnewUserBecomeAVendorIndexRoute:
+      authenticatedRoutesnewUserBecomeAVendorIndexRoute,
+  }
+
+const authenticatedRoutesnewUserRouteRouteWithChildren =
+  authenticatedRoutesnewUserRouteRoute._addFileChildren(
+    authenticatedRoutesnewUserRouteRouteChildren,
+  )
+
+interface authenticatedRoutesRouteRouteChildren {
+  authenticatedRoutesexistingUserRouteRoute: typeof authenticatedRoutesexistingUserRouteRouteWithChildren
+  authenticatedRoutesnewUserRouteRoute: typeof authenticatedRoutesnewUserRouteRouteWithChildren
+  authenticatedRoutesRedirectionIndexRoute: typeof authenticatedRoutesRedirectionIndexRoute
+}
+
+const authenticatedRoutesRouteRouteChildren: authenticatedRoutesRouteRouteChildren =
+  {
+    authenticatedRoutesexistingUserRouteRoute:
+      authenticatedRoutesexistingUserRouteRouteWithChildren,
+    authenticatedRoutesnewUserRouteRoute:
+      authenticatedRoutesnewUserRouteRouteWithChildren,
+    authenticatedRoutesRedirectionIndexRoute:
+      authenticatedRoutesRedirectionIndexRoute,
+  }
+
+const authenticatedRoutesRouteRouteWithChildren =
+  authenticatedRoutesRouteRoute._addFileChildren(
+    authenticatedRoutesRouteRouteChildren,
+  )
+
+interface publicRoutesRouteRouteChildren {
+  publicRoutesIndexRoute: typeof publicRoutesIndexRoute
+  publicRoutesAboutIndexRoute: typeof publicRoutesAboutIndexRoute
+  publicRoutesContactIndexRoute: typeof publicRoutesContactIndexRoute
+  publicRoutesServicesIndexRoute: typeof publicRoutesServicesIndexRoute
+}
+
+const publicRoutesRouteRouteChildren: publicRoutesRouteRouteChildren = {
+  publicRoutesIndexRoute: publicRoutesIndexRoute,
+  publicRoutesAboutIndexRoute: publicRoutesAboutIndexRoute,
+  publicRoutesContactIndexRoute: publicRoutesContactIndexRoute,
+  publicRoutesServicesIndexRoute: publicRoutesServicesIndexRoute,
+}
+
+const publicRoutesRouteRouteWithChildren =
+  publicRoutesRouteRoute._addFileChildren(publicRoutesRouteRouteChildren)
+
+interface unauthenticatedRoutesRouteRouteChildren {
+  unauthenticatedRoutesSignInIndexRoute: typeof unauthenticatedRoutesSignInIndexRoute
+}
+
+const unauthenticatedRoutesRouteRouteChildren: unauthenticatedRoutesRouteRouteChildren =
+  {
+    unauthenticatedRoutesSignInIndexRoute:
+      unauthenticatedRoutesSignInIndexRoute,
+  }
+
+const unauthenticatedRoutesRouteRouteWithChildren =
+  unauthenticatedRoutesRouteRoute._addFileChildren(
+    unauthenticatedRoutesRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutIndexRoute: AboutIndexRoute,
-  BecomeACustomerIndexRoute: BecomeACustomerIndexRoute,
-  BecomeAVendorIndexRoute: BecomeAVendorIndexRoute,
-  ContactIndexRoute: ContactIndexRoute,
-  ServicesIndexRoute: ServicesIndexRoute,
+  authenticatedRoutesRouteRoute: authenticatedRoutesRouteRouteWithChildren,
+  publicRoutesRouteRoute: publicRoutesRouteRouteWithChildren,
+  unauthenticatedRoutesRouteRoute: unauthenticatedRoutesRouteRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

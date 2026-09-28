@@ -1,0 +1,844 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "f5c9b9cc-84de-4257-98d0-75e709f7ea4a",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "customer_user": {
+      "name": "customer_user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pin_code": {
+          "name": "pin_code",
+          "type": "char(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'CUSE'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "customer_user_id": {
+          "name": "customer_user_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "customer_user_email_unique": {
+          "name": "customer_user_email_unique",
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "district": {
+      "name": "district",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "district_name": {
+          "name": "district_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "associated_state": {
+          "name": "associated_state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'DIST'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "district_associated_state_state_id_fk": {
+          "name": "district_associated_state_state_id_fk",
+          "tableFrom": "district",
+          "tableTo": "state",
+          "columnsFrom": [
+            "associated_state"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "district_id": {
+          "name": "district_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "payment": {
+      "name": "payment",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scrap_order_id": {
+          "name": "scrap_order_id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "razorpay_order_id": {
+          "name": "razorpay_order_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "razorpay_payment_id": {
+          "name": "razorpay_payment_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "razorpay_signature": {
+          "name": "razorpay_signature",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'PAYM'"
+        }
+      },
+      "indexes": {
+        "payment_razorpay_order_id_idx": {
+          "name": "payment_razorpay_order_id_idx",
+          "columns": [
+            "razorpay_order_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "payment_vendor_id_vendor_user_id_fk": {
+          "name": "payment_vendor_id_vendor_user_id_fk",
+          "tableFrom": "payment",
+          "tableTo": "vendor_user",
+          "columnsFrom": [
+            "vendor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "payment_scrap_order_id_scrap_collection_process_id_fk": {
+          "name": "payment_scrap_order_id_scrap_collection_process_id_fk",
+          "tableFrom": "payment",
+          "tableTo": "scrap_collection_process",
+          "columnsFrom": [
+            "scrap_order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "payment_id": {
+          "name": "payment_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "scrap_collection_process": {
+      "name": "scrap_collection_process",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "scrap_item_id": {
+          "name": "scrap_item_id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "floor": {
+          "name": "floor",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "landmark": {
+          "name": "landmark",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "collection_date_time": {
+          "name": "collection_date_time",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scrap_collection_status": {
+          "name": "scrap_collection_status",
+          "type": "enum('order-placed','payment-processing','order-accepted','process-completed')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'SCLP'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "scrap_collection_process_customer_id_customer_user_id_fk": {
+          "name": "scrap_collection_process_customer_id_customer_user_id_fk",
+          "tableFrom": "scrap_collection_process",
+          "tableTo": "customer_user",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "scrap_collection_process_vendor_id_vendor_user_id_fk": {
+          "name": "scrap_collection_process_vendor_id_vendor_user_id_fk",
+          "tableFrom": "scrap_collection_process",
+          "tableTo": "vendor_user",
+          "columnsFrom": [
+            "vendor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "cascade"
+        },
+        "scrap_collection_process_scrap_item_id_scrap_item_id_fk": {
+          "name": "scrap_collection_process_scrap_item_id_scrap_item_id_fk",
+          "tableFrom": "scrap_collection_process",
+          "tableTo": "scrap_item",
+          "columnsFrom": [
+            "scrap_item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "scrap_collection_process_id": {
+          "name": "scrap_collection_process_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "scrap_item": {
+      "name": "scrap_item",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "product_name": {
+          "name": "product_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "vendor_price": {
+          "name": "vendor_price",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_price": {
+          "name": "customer_price",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "price_unit": {
+          "name": "price_unit",
+          "type": "enum('piece','kilo')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "commision_rate": {
+          "name": "commision_rate",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'SCIT'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "scrap_item_id": {
+          "name": "scrap_item_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "scrap_item_product_name_unique": {
+          "name": "scrap_item_product_name_unique",
+          "columns": [
+            "product_name"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "serviceable_pincode": {
+      "name": "serviceable_pincode",
+      "columns": {
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pin_code": {
+          "name": "pin_code",
+          "type": "char(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'SPIN'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "serviceable_pincode_vendor_id_vendor_user_id_fk": {
+          "name": "serviceable_pincode_vendor_id_vendor_user_id_fk",
+          "tableFrom": "serviceable_pincode",
+          "tableTo": "vendor_user",
+          "columnsFrom": [
+            "vendor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "serviceable_pincode_vendor_id_pin_code_pk": {
+          "name": "serviceable_pincode_vendor_id_pin_code_pk",
+          "columns": [
+            "vendor_id",
+            "pin_code"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "state": {
+      "name": "state",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "state_name": {
+          "name": "state_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'STAT'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "state_id": {
+          "name": "state_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "state_state_name_unique": {
+          "name": "state_state_name_unique",
+          "columns": [
+            "state_name"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "vendor_scrap_item": {
+      "name": "vendor_scrap_item",
+      "columns": {
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scrap_item_id": {
+          "name": "scrap_item_id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'VSCI'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vendor_scrap_item_vendor_id_vendor_user_id_fk": {
+          "name": "vendor_scrap_item_vendor_id_vendor_user_id_fk",
+          "tableFrom": "vendor_scrap_item",
+          "tableTo": "vendor_user",
+          "columnsFrom": [
+            "vendor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "vendor_scrap_item_scrap_item_id_scrap_item_id_fk": {
+          "name": "vendor_scrap_item_scrap_item_id_scrap_item_id_fk",
+          "tableFrom": "vendor_scrap_item",
+          "tableTo": "scrap_item",
+          "columnsFrom": [
+            "scrap_item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "vendor_scrap_item_vendor_id_scrap_item_id_pk": {
+          "name": "vendor_scrap_item_vendor_id_scrap_item_id_pk",
+          "columns": [
+            "vendor_id",
+            "scrap_item_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "vendor_user": {
+      "name": "vendor_user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(9)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "aadhaar_number": {
+          "name": "aadhaar_number",
+          "type": "char(12)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "district": {
+          "name": "district",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "state": {
+          "name": "state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pin_code": {
+          "name": "pin_code",
+          "type": "char(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "table_identifier_token": {
+          "name": "table_identifier_token",
+          "type": "enum('SCIT','VUSE','CUSE','SPIN','SCLP','STAT','DIST','PAYM','VSCI')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'VUSE'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "vendor_user_id": {
+          "name": "vendor_user_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "vendor_user_email_unique": {
+          "name": "vendor_user_email_unique",
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    }
+  },
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
+  }
+}

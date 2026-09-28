@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import type { ComponentProps } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import type { LinkProps } from "@tanstack/react-router";
 import { cn } from "@/lib/utils/cn";
 import { ArrowRight, Menu, X } from "lucide-react";
 import Logo from "@/components/logo";
+import { authClient } from "@/lib/auth/auth-client";
 
 const navigation = [
   {
@@ -56,16 +58,13 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={cn(`fixed top-0 left-0 z-50 w-full`)}>
+      <section className={cn(`fixed top-0 left-0 z-50 w-full`)}>
         {/* Main Navbar */}
         <div
-          className={cn(
-            `border-b transition-all duration-300 ${
-              scrolled
-                ? "border-primary-500/10 bg-background/90 backdrop-blur-xl"
-                : "bg-background border-transparent"
-            } `,
-          )}
+          className={cn(`border-b transition-all duration-300`, {
+            "border-primary-500/10 bg-background/90 backdrop-blur-xl": scrolled,
+            "bg-background border-transparent": !scrolled,
+          })}
         >
           <div
             className={cn(
@@ -87,11 +86,11 @@ export default function Navbar() {
                     key={item.to}
                     to={item.to}
                     className={cn(
-                      `relative px-5 py-7 text-[12px] font-bold tracking-[0.18em] uppercase transition-colors duration-300 ${
-                        active
-                          ? "text-primary-500"
-                          : "text-foreground/65 hover:text-foreground"
-                      } `,
+                      `relative px-5 py-7 text-[12px] font-bold tracking-[0.18em] uppercase transition-colors duration-300`,
+                      {
+                        "text-primary-500": active,
+                        "text-foreground/65 hover:text-foreground": !active,
+                      },
                     )}
                   >
                     {item.label}
@@ -109,25 +108,7 @@ export default function Navbar() {
             </nav>
 
             {/* Desktop CTA */}
-            <div className={cn(`hidden items-center gap-3 lg:flex`)}>
-              <Link
-                to="/become-a-customer"
-                className={cn(
-                  `group bg-primary-500 text-primary-50 flex items-center gap-2 px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5`,
-                )}
-              >
-                Sell and Earn
-              </Link>
-
-              <Link
-                to="/become-a-vendor"
-                className={cn(
-                  `group border-primary-500 text-primary-500 flex items-center gap-2 border px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5`,
-                )}
-              >
-                Become a vendor
-              </Link>
-            </div>
+            <DesktopCTA />
 
             {/* Mobile Toggle */}
             <button
@@ -144,7 +125,7 @@ export default function Navbar() {
             </button>
           </div>
         </div>
-      </header>
+      </section>
 
       {/* Mobile Menu */}
       <div
@@ -211,28 +192,118 @@ export default function Navbar() {
               );
             })}
 
-            <div className={cn(`mt-auto space-y-3 pt-8`)}>
-              <Link
-                to="/become-a-customer"
-                className={cn(
-                  `border-primary-500/10 bg-primary-500 text-primary-50 flex items-center justify-center gap-2 border py-3 text-xs font-bold tracking-[0.18em] uppercase`,
-                )}
-              >
-                Sell and Earn
-              </Link>
-
-              <Link
-                to="/become-a-vendor"
-                className={cn(
-                  `border-primary-500 text-primary-500 flex items-center justify-center gap-2 border py-3 text-xs font-bold tracking-[0.18em] uppercase`,
-                )}
-              >
-                Become a vendor
-              </Link>
-            </div>
+            <MobileCTA />
           </div>
         </div>
       </div>
     </>
+  );
+}
+
+function DesktopCTA({ className, ...props }: ComponentProps<"div">) {
+  const { data, isPending } = authClient.useSession();
+
+  if (isPending) {
+    return (
+      <div
+        {...props}
+        className={cn("hidden items-center gap-3 lg:flex", className)}
+      >
+        <button
+          type="button"
+          disabled
+          className={cn(
+            "bg-primary-500/70 text-primary-50 flex cursor-not-allowed items-center gap-2 px-5 py-3 text-xs font-black tracking-[0.18em] uppercase",
+          )}
+        >
+          <span
+            className={cn(
+              "size-3 animate-spin rounded-full border-2 border-current border-t-transparent",
+            )}
+          />
+          Loading...
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      {...props}
+      className={cn("hidden items-center gap-3 lg:flex", className)}
+    >
+      {data ? (
+        <Link
+          to="/partner"
+          className={cn(
+            "group bg-primary-500 text-primary-50 flex items-center gap-2 px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5",
+          )}
+        >
+          Partner
+        </Link>
+      ) : (
+        <>
+          <Link
+            to="/become-a-customer"
+            className={cn(
+              "group bg-primary-500 text-primary-50 flex items-center gap-2 px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5",
+            )}
+          >
+            Sell and Earn
+          </Link>
+
+          <Link
+            to="/become-a-vendor"
+            className={cn(
+              "group border-primary-500 text-primary-500 flex items-center gap-2 border px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5",
+            )}
+          >
+            Become a vendor
+          </Link>
+        </>
+      )}
+    </div>
+  );
+}
+
+function MobileCTA({ className, ...props }: ComponentProps<"div">) {
+  const { data, isPending } = authClient.useSession();
+
+  if (isPending) {
+    return (
+      <div {...props} className={cn(`mt-auto space-y-3 pt-8`, className)}>
+        <div className="bg-primary-500/20 h-11 w-full animate-pulse" />
+        <div className="bg-primary-500/10 h-11 w-full animate-pulse" />
+      </div>
+    );
+  }
+
+  return (
+    <div {...props} className={cn(`mt-auto space-y-3 pt-8`, className)}>
+      {data ? (
+        <Link
+          to="/partner"
+          className="group bg-primary-500 text-primary-50 flex items-center justify-center gap-2 px-5 py-3 text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5"
+        >
+          Partner
+        </Link>
+      ) : (
+        <>
+          <Link
+            to="/become-a-customer"
+            className="border-primary-500/10 bg-primary-500 text-primary-50 flex items-center justify-center gap-2 border py-3 text-xs font-bold tracking-[0.18em] uppercase"
+          >
+            Sell and Earn
+          </Link>
+
+          <Link
+            to="/become-a-vendor"
+            className="border-primary-500 text-primary-500 flex items-center justify-center gap-2 border py-3 text-xs font-bold tracking-[0.18em] uppercase"
+          >
+            Become a vendor
+          </Link>
+        </>
+      )}
+    </div>
   );
 }

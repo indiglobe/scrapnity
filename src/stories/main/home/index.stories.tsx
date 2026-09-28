@@ -1,6 +1,6 @@
 import type { TypedMetaOptions } from "@/integrations/storybook/sb.types";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Hero } from "@/components/main/home/home";
+import { Hero } from "@/components/main/public-routes/home/home";
 import {
   createMemoryHistory,
   createRootRoute,

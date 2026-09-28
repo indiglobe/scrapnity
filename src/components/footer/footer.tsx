@@ -1,10 +1,16 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import type { LinkProps } from "@tanstack/react-router";
 import { cn } from "@/lib/utils/cn";
-import { ArrowRight, Mail, Phone } from "lucide-react";
+import { ArrowRight, Github, Mail, Phone } from "lucide-react";
 import type { ComponentProps } from "react";
 import Logo from "@/components/logo";
-import { platformEmail, platformPhoneNo } from "@/data/const";
+import {
+  PLATFORM_EMAIL,
+  PLATFORM_PHONE_NO,
+  SOURCE_CODE_LINK,
+} from "@/database/const";
+import { authClient } from "@/lib/auth/auth-client";
+import type { FileRoutesByFullPath, FileRoutesByTo } from "@/routeTree.gen";
 
 const navigation = [
   {
@@ -152,35 +158,40 @@ export function Footer({ className, ...props }: ComponentProps<"footer">) {
           </div>
 
           {/* Contact */}
+
           <div>
-            <h3
-              className={cn(`text-sm font-black tracking-[0.15em] uppercase`)}
-            >
-              Contact
-            </h3>
+            <Accounts className={cn(``, className)} />
 
-            <div className={cn(`mt-6 space-y-5`)}>
-              <a
-                href={`tel:+91${platformPhoneNo}`}
-                className={cn(`flex items-start gap-3`)}
+            <div>
+              <h3
+                className={cn(`text-sm font-black tracking-[0.15em] uppercase`)}
               >
-                <Phone className={cn(`text-primary-500 mt-0.5 h-4 w-4`)} />
+                Contact
+              </h3>
 
-                <span className={cn(`text-foreground/70 text-sm`)}>
-                  +91 {platformPhoneNo}
-                </span>
-              </a>
+              <div className={cn(`mt-6 space-y-5`)}>
+                <a
+                  href={`tel:+91${PLATFORM_PHONE_NO}`}
+                  className={cn(`flex items-start gap-3`)}
+                >
+                  <Phone className={cn(`text-primary-500 mt-0.5 h-4 w-4`)} />
 
-              <a
-                href={`mailto:${platformEmail}`}
-                className={cn(`flex items-start gap-3`)}
-              >
-                <Mail className={cn(`text-primary-500 mt-0.5 h-4 w-4`)} />
+                  <span className={cn(`text-foreground/70 text-sm`)}>
+                    +91 {PLATFORM_PHONE_NO}
+                  </span>
+                </a>
 
-                <span className={cn(`text-foreground/70 text-sm`)}>
-                  {platformEmail}
-                </span>
-              </a>
+                <a
+                  href={`mailto:${PLATFORM_EMAIL}`}
+                  className={cn(`flex items-start gap-3`)}
+                >
+                  <Mail className={cn(`text-primary-500 mt-0.5 h-4 w-4`)} />
+
+                  <span className={cn(`text-foreground/70 text-sm`)}>
+                    {PLATFORM_EMAIL}
+                  </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -199,6 +210,9 @@ export function Footer({ className, ...props }: ComponentProps<"footer">) {
 
           <div>
             <p className={cn(`text-foreground/50 text-sm`)}>
+              <a href={SOURCE_CODE_LINK}>
+                <Github className={cn(`inline-block size-4`)} />
+              </a>{" "}
               Developed by{" "}
               <a href="https://indiglobe.in" className={cn(`underline`)}>
                 Indiglobe
@@ -208,5 +222,63 @@ export function Footer({ className, ...props }: ComponentProps<"footer">) {
         </div>
       </div>
     </footer>
+  );
+}
+
+function Accounts({ className, ...props }: ComponentProps<"div">) {
+  const { data, isPending } = authClient.useSession();
+  const selected = useRouterState({
+    select: (state) => state.location,
+  });
+  const navigate = useNavigate();
+
+  async function signout() {
+    const PUBLIC_ROUTES = [
+      "/",
+      "/about",
+      "/about/",
+      "/contact",
+      "/contact/",
+      "/services",
+      "/services/",
+    ] satisfies (keyof FileRoutesByTo | keyof FileRoutesByFullPath)[];
+
+    if (PUBLIC_ROUTES.includes(selected.pathname as any)) {
+      await authClient.signOut();
+      return;
+    }
+    await authClient.signOut();
+    navigate({ to: "/" });
+    return;
+  }
+
+  return (
+    <div className={cn(`mb-10`, className)} {...props}>
+      <h3 className={cn(`text-sm font-black tracking-[0.15em] uppercase`)}>
+        Accounts
+      </h3>
+
+      <div
+        className={cn(
+          `text-foreground/60 mt-6 flex flex-col items-start gap-3 text-sm`,
+        )}
+      >
+        {!isPending && (
+          <>
+            {data ? (
+              <>
+                <button onClick={signout}>Logout</button>
+              </>
+            ) : (
+              <>
+                <Link to={"/partner"}>Partner</Link>
+              </>
+            )}
+          </>
+        )}
+
+        {isPending && <span>Loading...</span>}
+      </div>
+    </div>
   );
 }
